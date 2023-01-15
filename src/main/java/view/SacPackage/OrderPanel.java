@@ -198,9 +198,20 @@ public class OrderPanel extends javax.swing.JPanel {
                     int nr = 0;
                     Adres adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
                     if(adresList.getSelectedIndex() == 0)   {   // jeśli wybrano pierwszą pozycję na liście, a zawsze nią będzie "dodaj nowy adres"
+                        if(!(txtCity.getText().matches("[a-zA-Z]+")) || !(txtStreet.getText().matches("[a-zA-Z]+")) || !(txtNumber.getText().matches("[0-9]+"))) {    // jeśli wprowadzono nieprawidłowe dane
+                            JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                        
                         AdresDao adresDao = new AdresDao();
-                        code = Integer.parseInt(txtCode.getText());     // musi być tak bo inaczej czemuś wywala error
-                        nr = Integer.parseInt(txtNrlocal.getText());
+                        try {
+                            code = Integer.parseInt(txtCode.getText());     // musi być tak bo inaczej czemuś wywala error
+                            nr = Integer.parseInt(txtNrlocal.getText());
+                        } catch (NumberFormatException ne) {
+                            JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
+                            return;     // wyjdz z scope eventu
+                        }
+                        
                         adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
                         adresDao.addAdres(adres);  
                     }
@@ -208,17 +219,16 @@ public class OrderPanel extends javax.swing.JPanel {
                     //
                     // Tutaj funkcjonalność dodania do listy zamówień danego zamówienia
                     //
-                    PanelLoginAndRegister plr = new PanelLoginAndRegister();
                     AdresDao adresDao = new AdresDao();
                     SposobRealizacjiDao sposobRealizacjiDao = new SposobRealizacjiDao();
                     ZamowienieDao zamowienieDao = new ZamowienieDao();
                     
                     if(adresList.getSelectedIndex() == 0) {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), plr.getUzytkownik());
+                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                     else {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), plr.getUzytkownik());
+                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                                 

@@ -105,6 +105,12 @@ public class PanelLoginAndRegister extends JPanel {
                 UzytkownikDao dao = new UzytkownikDao();
                 Uzytkownik user = new Uzytkownik();
                 String login = txtUser.getText(), pass = txtPassReg.getText(), name = txtname.getText(), surname = txtsurname.getText(), email = txtEmail.getText(), pass2 = txtPass2.getText();
+                
+                if(!(txtname.getText().matches("[a-zA-Z]+")) || !(txtsurname.getText().matches("[a-zA-Z]+")) || !txtEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {    // jeśli imie, naziwsko zawiera inne znaki niż litery i czy poprawny format emaila
+                    JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych.", "", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                
                 if (!"".equals(login) && !"".equals(pass) && !"".equals(name) && !"".equals(surname) && !"".equals(email) && pass.equals(pass2)) {
                     user = dao.addUser(name, surname, login, pass, new Date(), email, false);
                     
@@ -201,6 +207,7 @@ public class PanelLoginAndRegister extends JPanel {
                 UzytkownikDao dao = new UzytkownikDao();
                 Uzytkownik user;
                 String login = txtUserLog.getText(), pass = txtPassLog.getText();
+                
                 if (!"".equals(login) && !"".equals(pass)) {
                     user = dao.getUser(pass, login);
                     setUzytkownik(user);
