@@ -32,7 +32,6 @@ public abstract class DAO<T> {
         if (session == null) {
             session = sf.openSession();
         }
-
         return session;
     }
 
@@ -41,7 +40,6 @@ public abstract class DAO<T> {
         if (!TransactionStatus.ACTIVE.equals(tx.getStatus())) {
             tx = session.beginTransaction();
         }
-
         return tx;
     }
 

@@ -21,10 +21,10 @@ public class AdresDao extends DAO<Adres> {
                 + "from map.Adres p ")
                 .getResultList();
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             return cat;
         }
-
         return null;
     }
 
@@ -56,6 +56,7 @@ public class AdresDao extends DAO<Adres> {
                 .setParameter("nrLokalu", nrLokalu)
                 .uniqueResult();
         session.getTransaction().commit();
+        session.close();
         if (adres != null) {
             return adres;
         }
@@ -79,6 +80,7 @@ public class AdresDao extends DAO<Adres> {
                 .setParameter("nrBudynku", nrBudynku)
                 .uniqueResult();
         session.getTransaction().commit();
+        session.close();
         if (adres != null) {
             return adres;
         }

@@ -20,6 +20,7 @@ public class SposobRealizacjiDao extends DAO<SposobRealizacji>{
                 + "from map.SposobRealizacji p ")
                 .getResultList();
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             return cat;
         }

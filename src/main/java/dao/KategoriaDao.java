@@ -25,6 +25,7 @@ public class KategoriaDao extends DAO<Kategoria> {
                 + "from map.Kategoria cat ")
                 .getResultList();
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             return cat;
         }
@@ -44,13 +45,12 @@ public class KategoriaDao extends DAO<Kategoria> {
                 .setParameter("nazwaKategorii", nazwaKategorii)
                 .setParameter("opisKategorii", opisKategorii)
                 .uniqueResult();
-
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             System.out.println(cat.getNazwaKategorii() + "  " + cat.getOpisKategorii());
             return cat;
         }
-
         return null;
     }
 
@@ -79,6 +79,7 @@ public class KategoriaDao extends DAO<Kategoria> {
                 .uniqueResult();
 
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             System.out.println(cat.getOpisKategorii() + " " + cat.getIdKategoria());
             return cat;

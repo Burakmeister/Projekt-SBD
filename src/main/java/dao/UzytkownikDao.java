@@ -28,8 +28,8 @@ public class UzytkownikDao extends DAO<Uzytkownik> {
                 .uniqueResult();
 
         session.getTransaction().commit();
+        session.close();
         if (user != null) {
-            System.out.println(user.getImie() + "  " + user.getNazwisko());
             return user;
         }
         return null;

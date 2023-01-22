@@ -26,7 +26,6 @@ public class MagazynDao extends DAO<Magazyn> {
         if (cat != null) {
             return cat;
         }
-
         return null;
     }
 
@@ -51,10 +50,9 @@ public class MagazynDao extends DAO<Magazyn> {
                 .setParameter("pojemnosc", pojemnosc)
                 .setParameter("adres", adres)
                 .uniqueResult();
-
         session.getTransaction().commit();
+        session.close();
         if (magazyn != null) {
-            System.out.println("yep");
             return magazyn;
         }
 

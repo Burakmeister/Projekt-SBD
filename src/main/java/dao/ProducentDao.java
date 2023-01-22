@@ -22,10 +22,10 @@ public class ProducentDao extends DAO<Producent> {
                 + "from map.Producent cat ")
                 .getResultList();
         session.getTransaction().commit();
+        session.close();
         if (cat != null) {
             return cat;
         }
-
         return null;
     }
 
@@ -42,10 +42,9 @@ public class ProducentDao extends DAO<Producent> {
                 .setParameter("kraj", kraj)
                 .setParameter("opisProducenta", opisProducenta)
                 .uniqueResult();
-
         session.getTransaction().commit();
+        session.close();
         if (boss != null) {
-            System.out.println(boss.getNazwaProducenta() + "  " + boss.getKraj() + "  " + boss.getOpisProducenta());
             return boss;
         }
         return null;
@@ -64,8 +63,8 @@ public class ProducentDao extends DAO<Producent> {
                 .uniqueResult();
 
         session.getTransaction().commit();
+        session.close();
         if (boss != null) {
-            System.out.println(boss.getNazwaProducenta() + "  " + boss.getKraj() + "  " + boss.getOpisProducenta());
             return boss;
         }
         return null;
