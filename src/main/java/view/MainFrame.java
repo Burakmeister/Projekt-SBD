@@ -11,23 +11,27 @@ import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JPanel;
 // Brane z maven
-import net.miginfocom.swing.MigLayout;  // aby łatwiej robić layouty
+import net.miginfocom.swing.MigLayout;  // aby Ĺ‚atwiej robiÄ‡ layouty
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 import org.jdesktop.animation.timing.Animator;
-// Brane z zewnętrznych klas
+// Brane z zewnÄ™trznych klas
 import map.Produkt;
 import map.Uzytkownik;
+import map.Zamowienie;
 import view.SacPackage.OrderPanel;
 import view.SacPackage.UzytForm;
 import view.layouts.CartLayout;
 import view.layouts.NewProduct;
 import view.layouts.WarehouseLayout;
 
-public class MainFrame extends javax.swing.JFrame {     // główny main na dole
+public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na dole
 
     public static org.hibernate.Session session;
 
@@ -39,7 +43,7 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
     private final double addSize = 30;
     private final double coverSize = 40;
     private final double loginSize = 60;
-    private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));  // patrz fractionCover = Double... , po prostu inaczej nie działało
+    private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));  // patrz fractionCover = Double... , po prostu inaczej nie dziaĹ‚aĹ‚o
 
     // Z ShopFrame
     private JPanel[] panels; //0-shopLayout  1-tymczasowe  2-koszyk   3-userConfig
@@ -48,7 +52,6 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
     private static boolean wasScalling = false;
 
     public MainFrame() {
-        test();
         this.setTitle("Hardware Shop");
         this.setResizable(false);
         this.panels = new JPanel[4];
@@ -160,8 +163,49 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
         tmp.addWarehouseProduct(produkt);
     }
 
-    public void showOrderDetails() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void showOrderDetails(Zamowienie zamowienie) {
+        HashMap<Produkt, Integer> products = new HashMap<>();
+        List<Produkt> allProducts = zamowienie.getProdukt();
+        allProducts.sort((Object o1, Object o2) -> {
+            Produkt p1 = (Produkt)o1;
+            Produkt p2 = (Produkt)o2;
+            if(p1.getIdProduktu()< p2.getIdProduktu()){
+                return 1;
+            }else if(p1.getIdProduktu()> p2.getIdProduktu()){
+                return -1;
+            }
+            return 0;            
+        });
+        products.put(allProducts.get(0), 1);
+        for(int i=1; i<allProducts.size(); i++){
+            if(products.containsKey(allProducts.get(i))){
+                products.put(allProducts.get(i), products.get(allProducts.get(i))+1);
+            }
+        }
+        this.panels[3].setVisible(false);
+        this.panels[1] = new CartLayout();
+        CartLayout cl = (CartLayout)this.panels[1];
+        this.panels[1].setVisible(true);
+        for(Produkt p: products.keySet()){
+            for(Integer i: products.values()){
+                for(int j=0; j<i; j++){
+                    cl.addProduct(p);
+                }
+            }
+        }
+    }
+    
+    public List<Produkt> getProductsFromCart(){
+        List<Produkt> ret = new ArrayList<>();
+        CartLayout cl = (CartLayout)this.panels[2];
+        List<Produkt> products = cl.getProducts();
+        List<Integer> ints = cl.getNumOfProducts();
+        for(int i=0; i<products.size(); i++){
+            for(int j=0; j<ints.get(i); j++){
+                ret.add(products.get(i));
+            }
+        }
+        return ret;
     }
 
     public void loadPanels(Uzytkownik user) {
@@ -201,22 +245,8 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
         sl.addProduct(produkt);
     }
 
-    private void test() {
-//        KategoriaDao dao1 = new KategoriaDao();
-//        dao1.addKategoria("Ram", "Pamięć o dostępie swobodnym, pamięć główna, RAM");
-//        dao1.addKategoria("Płyta główna", "Obwód drukowany urządzenia elektronicznego, na którym montuje się najważniejsze elementy, umożliwiając komunikację wszystkim pozostałym komponentom i modułom");
-//        dao1.addKategoria("Procesor", "Sekwencyjne urządzenie cyfrowe, które pobiera dane z pamięci operacyjnej lub strumienia danych, interpretuje je i wykonuje jako rozkazy, zwracając dane do pamięci lub wyjściowego strumienia danych");
-//        dao1.addKategoria("Zasilacz", "Urządzenie służące do dopasowania dostępnego napięcia do wymagań zasilanego urządzenia");
-//        
-//        ProducentDao dao2 = new ProducentDao();
-//        dao2.addProducent("ASUS", "Tajwan", "Tajwańskie przedsiębiorstwo zajmujące się produkcją elektroniki, głównie: płyt głównych, kart graficznych, laptopów, smartfonów, tabletów, komputerów stacjonarnych oraz napędów optycznych");
-//        
-//        UzytkownikDao dao3 = new UzytkownikDao();
-//        dao3.addUser("Dawid", "Bartosiuk", "b", "b", new Date(), "dawid@bartosiuk.pl", true);
-    }
-
     private void init() {
-        layout = new MigLayout("fill, insets 0");    // insets 0 aby nie było dziwnych odstępów np. od panel covera, można też po insets dopisać ",debug" aby zobaczyć krawędzie layoutu
+        layout = new MigLayout("fill, insets 0");    // insets 0 aby nie byĹ‚o dziwnych odstÄ™pĂłw np. od panel covera, moĹĽna teĹĽ po insets dopisaÄ‡ ",debug" aby zobaczyÄ‡ krawÄ™dzie layoutu
         cover = new PanelCover();
         loginAndRegister = new PanelLoginAndRegister();
         TimingTarget target = new TimingTargetAdapter() {
@@ -267,17 +297,17 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
             }
         };
 
-        final Animator animator = new Animator(800, target);   // java kazało mi tu zrobić final bo jest głupia - ale może tak nie powinno być??
+        final Animator animator = new Animator(800, target);   // java kazaĹ‚o mi tu zrobiÄ‡ final bo jest gĹ‚upia - ale moĹĽe tak nie powinno byÄ‡??
         animator.setAcceleration(0.5f);
         animator.setDeceleration(0.5f);
-        animator.setResolution(0);  // aby była płynna animacja i nie dostać oczopląsu
+        animator.setResolution(0);  // aby byĹ‚a pĹ‚ynna animacja i nie dostaÄ‡ oczoplÄ…su
         Background.setLayout(layout);
         Background.add(cover, "width " + coverSize + "%, pos 0al 0 n 100%");
         Background.add(loginAndRegister, "width " + loginSize + "%, pos 1al 0 n 100%"); // 1al - 100%
         cover.addEvent(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (!animator.isRunning()) {     // jeśli nie trwa aktualnie żadna animacja, rozpocznij nową
+                if (!animator.isRunning()) {     // jeĹ›li nie trwa aktualnie ĹĽadna animacja, rozpocznij nowÄ…
                     animator.start();
                 }
             }

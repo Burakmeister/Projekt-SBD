@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -180,6 +181,14 @@ public class CartLayout extends JPanel implements ActionListener {
 
         this.upPanel.setBackground(Color.BLACK);
         this.upPanel.add(this.returnButton);
+    }
+    
+    public List<Produkt> getProducts() {
+        return this.mainPanel.getProducts();
+    }
+
+    public List<Integer> getNumOfProducts() {
+        return this.mainPanel.getNumOfProducts();
     }
 
     @Override

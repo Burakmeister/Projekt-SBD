@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import map.Uzytkownik;
+import map.Zamowienie;
 import view.MainFrame;
 
 
@@ -424,7 +425,7 @@ public class UzytForm extends javax.swing.JPanel {
     private void zobaczSzczegolyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zobaczSzczegolyButtonActionPerformed
 //        Po naciśnięciu przycisku zmiana widok
         MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-        mf.showOrderDetails();
+        mf.showOrderDetails(new Zamowienie());
     }//GEN-LAST:event_zobaczSzczegolyButtonActionPerformed
 
     private void zapiszButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zapiszButtonActionPerformed
