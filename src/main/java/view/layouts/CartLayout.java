@@ -39,6 +39,8 @@ public class CartLayout extends JPanel implements ActionListener {
     JLabel quantity;
     JLabel sum;
     JLabel mass;
+    
+    private List<Produkt> products;    // musi być aby przekazać produkty do OrderPanel!!
 
     public CartLayout() {
         this.setLayout(null);
@@ -92,7 +94,7 @@ public class CartLayout extends JPanel implements ActionListener {
         float sumFloat = 0;
         int numOf = 0;
         float massFloat = 0;
-        ArrayList<Produkt> products = (ArrayList<Produkt>) this.mainPanel.getProducts();
+        products = (ArrayList<Produkt>) this.mainPanel.getProducts();
         ArrayList<Integer> numOfProducts = (ArrayList<Integer>) this.mainPanel.getNumOfProducts();
         int i = 0;
         for (Produkt p : products) {
@@ -199,7 +201,7 @@ public class CartLayout extends JPanel implements ActionListener {
         }
         if (e.getSource() == this.complete) {
             MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-            mf.showCompleteOrder();
+            mf.showCompleteOrder(products);
         }
     }
 }

@@ -33,6 +33,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import map.Produkt;
 import map.SposobRealizacji;
 import map.Uzytkownik;
 import map.Zamowienie;
@@ -46,10 +47,13 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private ArrayList<Adres> adresy;    // tutaj zapisywane będą adresy brane z bazy i z tabeli utworzony jest JList
     private List<SposobRealizacji> sposobyRealizacji;     // a tutaj sposoby realizacji
+    private List<Produkt> produkty;
+    private float sumaZamowienie;
     
-    public OrderPanel() {
+    public OrderPanel(List<Produkt> produkty) {
         initComponents();
         init();
+        this.produkty = produkty;
     }
 
     private String czyWniesienie(boolean b) {   // do ładnego sformatowania tekstu przy sposobach realizacji
@@ -173,12 +177,29 @@ public class OrderPanel extends javax.swing.JPanel {
         uwagiField.setBackground(Color.WHITE);
         uwagiField.setBounds(150, 800, 990, 45);
         this.add(uwagiField);
+        
+         // Pobranie produktów z koszyka
+        //MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
+        //produkty = mf.getProductsFromCart();
+        
+        // Obliczenie całkowitego kosztu zamówienia
+        int i = 0;
+        for (Produkt p : produkty) {
+            sumaZamowienie += p.getCena() * (int) (p.getLiczbaSztuk());
+            i++;
+        }
+        
+        MyTextField cenaField = new MyTextField();
+        cenaField.setHint("Całkowity koszt zamówienia: " + sumaZamowienie);
+        cenaField.setBackground(Color.WHITE);
+        cenaField.setBounds(150, 890, 990, 45);
+        this.add(cenaField);
 
         Button orderButton = new Button();
         orderButton.setBackground(new Color(196, 53, 53));
         orderButton.setForeground(new Color(250, 250, 250));
         orderButton.setText("Złóż zamówienie");
-        orderButton.setBounds(150, 890, 180, 35);
+        orderButton.setBounds(150, 980, 180, 35);
         this.add(orderButton, "w 40%, h 40");
         
         orderButton.addActionListener(new ActionListener() {
@@ -243,7 +264,7 @@ public class OrderPanel extends javax.swing.JPanel {
         backButton.setBackground(new Color(196, 53, 53));
         backButton.setForeground(new Color(250, 250, 250));
         backButton.setText("Wróć do koszyka");
-        backButton.setBounds(380, 890, 200, 35);
+        backButton.setBounds(380, 980, 200, 35);
         this.add(backButton);
         
         backButton.addActionListener(new ActionListener() {     // po naciśnięciu powrót do koszyka

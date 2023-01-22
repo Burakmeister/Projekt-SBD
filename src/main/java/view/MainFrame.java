@@ -76,7 +76,7 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         sl.refreshProduct(produkt);
     }
 
-    public void updateAvailability() {
+    public void updateAvailabilietty() {
         ShopLayout sl = (ShopLayout) this.panels[0];
         sl.updateAvailability();
     }
@@ -98,9 +98,9 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         this.add(panels[1]);
     }
 
-    public void showCompleteOrder() {
+    public void showCompleteOrder(List<Produkt> produkty) {
         this.panels[2].setVisible(false);
-        this.panels[1] = new OrderPanel();
+        this.panels[1] = new OrderPanel(produkty);
         this.add(panels[1]);
     }
 
