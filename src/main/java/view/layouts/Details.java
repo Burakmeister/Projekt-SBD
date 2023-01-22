@@ -411,22 +411,31 @@ public class Details extends JPanel implements ActionListener {
                         produkt.setOpis(descTextArea.getText());
                         produkt.setProducent(prod);
                         produkt.setMasa(Float.parseFloat(mass.getText()));
-                        produkt.setMagazyn(magazyny_produktu);
-                        if (produkt.getzamowienie() != null) {
-                            if (produkt.getzamowienie().isEmpty()) {
-                                produkt.setZamowienie(null);
+                        
+                        List<Magazyn> magTemp = produkt.getMagazyn();
+                        ArrayList<Magazyn> newMags = new ArrayList<>();
+                        boolean isExist;
+                        for(Magazyn magazyn: magazyny_produktu){
+                            isExist=false;
+                            for(Magazyn mCur: magTemp){
+                                if(magazyn.equals(mCur)){
+                                    newMags.add(magazyn);
+                                    isExist = true;
+                                }
+                            }
+                            if(!isExist){
+                                newMags.add(magazyn);
                             }
                         }
+                        
+                        produkt.setMagazyn(newMags);
+                        produkt.setLiczbaSztuk(produkt.getMagazyn().size());
 
                         MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(returnButton);
-                        if (produkt.getMagazyn() != null) {
-                            produkt.setLiczbaSztuk(produkt.getMagazyn().size());
-                            dao.update(produkt);
-                        } else {
-                            dao.update(produkt);
-                        }
+                        dao.update(produkt);
                         produktPopPup();
                         mf.refreshShop(produkt);
+                        mf.updateAvailability();
                         mf.refreshWarehouse();
                     }
                 }

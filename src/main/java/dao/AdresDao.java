@@ -84,10 +84,4 @@ public class AdresDao extends DAO<Adres> {
         }
         return null;
     }
-
-    @Override
-    public List<Adres> search(Adres criteria) {
-        return null;
-    }
-
 }

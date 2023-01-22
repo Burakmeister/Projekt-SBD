@@ -85,4 +85,28 @@ public class Magazyn {
     public List<Produkt> getProdukt() {
         return this.produkt;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.idMagazynu;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Magazyn other = (Magazyn) obj;
+        return this.idMagazynu == other.idMagazynu;
+    }
+    
+    
 }

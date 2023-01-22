@@ -11,11 +11,6 @@ import java.util.List;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,6 +24,7 @@ import javax.swing.SwingUtilities;
 import map.Produkt;
 
 import view.Image;
+import view.Letter;
 import view.MainFrame;
 
 public class ListPanel extends JPanel implements ActionListener {
@@ -47,7 +43,7 @@ public class ListPanel extends JPanel implements ActionListener {
     private final List<JTextArea> shortTextLabel = new ArrayList<>();
     private final List<JTextField> priceField = new ArrayList<>();
     private final List<JTextField> numOfProductsField = new ArrayList<>();
-    private final List<Produkt> list = new ArrayList<Produkt>();
+    private final List<Produkt> list = new ArrayList<>();
 
     public ListPanel(Dimension dim, int cardinality, boolean admin) {
         this.admin = admin;
@@ -96,7 +92,6 @@ public class ListPanel extends JPanel implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (e.getSource() == add_product) {
-                        System.out.println("Przejscie do nowego produktu");
                         MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
                         mf.showNewProduct();
                     }
@@ -134,13 +129,11 @@ public class ListPanel extends JPanel implements ActionListener {
         if (produkt.getCena() * 100 % 10 == 0) {
             pr += "0";
         }
-        Icon icon = new ImageIcon("src/main/products/" + produkt.getNazwaObrazka());
         shortText = new JTextArea(produkt.getNazwaProduktu());
         price = new JTextField("Cena: " + pr);
-        numOfProducts = new JTextField("Ilość: " + String.valueOf(produkt.getLiczbaSztuk()));
+        numOfProducts = new JTextField("Ilo"+Letter.SII.getLetter()+Letter.CI.getLetter()+": " + String.valueOf(produkt.getLiczbaSztuk()));
         price.setFont(font);
         numOfProducts.setFont(font);
-//        }
 
         shortText.setFont(font);
         shortText.setLineWrap(true);
@@ -286,7 +279,6 @@ public class ListPanel extends JPanel implements ActionListener {
         ArrayList<Produkt> products = dao.getAll();
         for (Produkt produkt : products) {
             for (String cat : katList) {
-                System.out.println(cat + "    " + produkt.getKategoria().getNazwaKategorii());
                 if (produkt.getKategoria().getNazwaKategorii().equals(cat)) {
                     this.addProdukt(produkt);
                 }
@@ -295,6 +287,25 @@ public class ListPanel extends JPanel implements ActionListener {
         this.revalidate();
         this.repaint();
     }
+    
+    public void updateAvailability(){
+        ProduktDao pDao = new ProduktDao();
+        while (!this.list.isEmpty()) {
+            this.list.remove(0);
+        }
+        
+        for(Produkt p: pDao.getAll()){
+            this.list.add(p);
+        }
+        
+        for(int i=0; i<this.numOfProductsField.size(); i++){
+            this.numOfProductsField.get(i).setText(
+                    String.valueOf(
+                            this.list.get(i).getLiczbaSztuk()
+                    )
+            );
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -302,13 +313,11 @@ public class ListPanel extends JPanel implements ActionListener {
         for (JButton but : this.addToCartButton) {
             if (e.getSource() == but) {
                 if (admin) {
-                    System.out.println("Usunięto: " + this.list.get(i).getNazwaProduktu());
                     ProduktDao dao = new ProduktDao();
                     dao.delete(this.list.get(i));
                     this.removeProdukt(i);
                 } else {
                     this.addToCartPopUp();
-                    System.out.println("Dodano do koszyka: " + this.list.get(i).getNazwaProduktu());
                     MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
                     mf.addProductToCart(this.list.get(i));
                 }
@@ -318,7 +327,7 @@ public class ListPanel extends JPanel implements ActionListener {
         i = 0;
         for (JButton but : this.toDetailsButton) {
             if (e.getSource() == but) {
-                System.out.println("Przejscie do detali: " + this.list.get(i).getNazwaProduktu());
+                System.out.println("Przej"+Letter.SII.getLetter()+"cie do detali: " + this.list.get(i).getNazwaProduktu());
                 MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
                 mf.showProductPanel(this.list.get(i));
             }
@@ -333,7 +342,7 @@ public class ListPanel extends JPanel implements ActionListener {
     void refreshProduct(Produkt produkt) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getIdProduktu() == produkt.getIdProduktu()) {
-                this.numOfProductsField.get(i).setText("Ilość: " + String.valueOf(produkt.getLiczbaSztuk()));
+                this.numOfProductsField.get(i).setText("Ilo"+Letter.SII.getLetter()+Letter.CI.getLetter()+": " + String.valueOf(produkt.getLiczbaSztuk()));
                 this.shortTextLabel.get(i).setText(produkt.getNazwaProduktu());
                 String pr = String.valueOf(produkt.getCena());
                 if (produkt.getCena() * 10 % 10 == 0) {

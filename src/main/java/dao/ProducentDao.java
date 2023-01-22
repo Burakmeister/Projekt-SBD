@@ -13,11 +13,6 @@ public class ProducentDao extends DAO<Producent> {
         this.setmodelClass(map.Producent.class);
     }
 
-    @Override
-    public List<Producent> search(Producent criteria) {
-        return null;
-    }
-
     public List<Producent> getAll() {
         Session session = this.getSession();
         session.beginTransaction();
@@ -88,7 +83,6 @@ public class ProducentDao extends DAO<Producent> {
         session.persist(boss);
         session.getTransaction().commit();
         session.close();
-
         return null;
     }
 }

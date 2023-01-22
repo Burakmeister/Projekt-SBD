@@ -38,7 +38,6 @@ map\Uzytkownik.class
 view\SacPackage\UzytForm$11.class
 view\SacPackage\PanelCover.class
 view\MainFrame$1.class
-view\SacPackage\OrderPanel$5.class
 view\SacPackage\UzytForm$2.class
 view\layouts\WarehouseLayout.class
 view\SacPackage\PanelLoginAndRegister$1.class
@@ -50,11 +49,9 @@ view\SacPackage\UzytForm$8.class
 dao\MagazynDao.class
 map\Zamowienie.class
 view\SacPackage\UzytForm$5.class
-.netbeans_automatic_build
 view\layouts\Cart$2.class
 view\SacPackage\UzytForm$6.class
 view\SacPackage\PanelLoginAndRegister$2.class
-view\SacPackage\OrderPanel$6.class
 view\MainFrame.class
 view\SacPackage\UzytForm$12.class
 dao\ZamowienieDao.class

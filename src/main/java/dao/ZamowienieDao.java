@@ -17,10 +17,5 @@ public class ZamowienieDao extends DAO<Zamowienie>{
         session.getTransaction().commit();
         session.close();
         return null;
-    }
-    
-    @Override
-    public List<Zamowienie> search(Zamowienie criteria) {
-        return null;
     }   
 }

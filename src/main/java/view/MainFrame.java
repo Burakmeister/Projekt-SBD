@@ -61,7 +61,7 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
         if (!fromWarehouse) {
             CartLayout tmp = (CartLayout) this.panels[2];
             tmp.refreshCategoryPanel();
-        }else{
+        } else {
             WarehouseLayout tmp = (WarehouseLayout) this.panels[2];
             tmp.refreshCategoryPanel();
         }
@@ -72,11 +72,15 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
         ShopLayout sl = (ShopLayout) this.panels[0];
         sl.refreshProduct(produkt);
     }
-    
-        
-    public void refreshWarehouse(){
+
+    public void updateAvailability() {
+        ShopLayout sl = (ShopLayout) this.panels[0];
+        sl.updateAvailability();
+    }
+
+    public void refreshWarehouse() {
         WarehouseLayout tmp = (WarehouseLayout) this.panels[2];
-            tmp.refreshWarehouses();
+        tmp.refreshWarehouses();
     }
 
     public void showProductPanel(Produkt produkt) {
@@ -150,8 +154,8 @@ public class MainFrame extends javax.swing.JFrame {     // główny main na dole
         CartLayout panel = (CartLayout) this.panels[2];
         panel.addProduct(produkt);
     }
-    
-    public void addWarehouseProduct(Produkt produkt){
+
+    public void addWarehouseProduct(Produkt produkt) {
         WarehouseLayout tmp = (WarehouseLayout) this.panels[2];
         tmp.addWarehouseProduct(produkt);
     }

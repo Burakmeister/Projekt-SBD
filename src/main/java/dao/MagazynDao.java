@@ -60,9 +60,4 @@ public class MagazynDao extends DAO<Magazyn> {
 
         return null;
     }
-
-    @Override
-    public List<Magazyn> search(Magazyn criteria) {
-        return null;
-    }
 }

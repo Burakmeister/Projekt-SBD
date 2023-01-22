@@ -26,9 +26,4 @@ public class SposobRealizacjiDao extends DAO<SposobRealizacji>{
 
         return null;
     }
-    
-    @Override
-    public List<SposobRealizacji> search(SposobRealizacji criteria) {   // to może nie być potrzebne
-        return null;
-    }
 }

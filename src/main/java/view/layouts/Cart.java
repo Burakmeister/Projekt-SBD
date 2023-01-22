@@ -25,7 +25,6 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
-import map.Magazyn;
 import map.Produkt;
 import view.Image;
 import view.MainFrame;
@@ -112,7 +111,7 @@ public class Cart extends JPanel {
 
         spinner = new JSpinner(model);
         spinner.addChangeListener((ChangeEvent e) -> {
-            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
             if (!warehouseCart) {
                 frame.refreshCategoryPanel(false);
             }
@@ -198,7 +197,7 @@ public class Cart extends JPanel {
         toDetails.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+                MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
                 frame.showProductPanelCart(produkt);
             }
 

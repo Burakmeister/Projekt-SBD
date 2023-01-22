@@ -85,9 +85,4 @@ public class KategoriaDao extends DAO<Kategoria> {
         }
         return null;
     }
-
-    @Override
-    public List<Kategoria> search(Kategoria criteria) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

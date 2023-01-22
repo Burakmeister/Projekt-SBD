@@ -13,6 +13,7 @@ import java.util.Locale;
 import javax.swing.JLabel;
 // Brane z maven
 import net.miginfocom.swing.MigLayout;
+import view.Letter;
 // Klasy rozszerzające
 import view.SacPackage.ButtonOutLine;
 
@@ -42,16 +43,16 @@ public class PanelCover extends javax.swing.JPanel {
     }
 
     private void init() {
-        title = new JLabel("Witaj użytkowniku!");
+        title = new JLabel("Witaj u"+Letter.ZY.getLetter()+"ytkowniku!");
         title.setFont(new Font("sansserif", 1, 30));
         title.setForeground(new Color(245, 245, 245));
         add(title);
         
-        description = new JLabel("Aby kontynuować dalej,");
+        description = new JLabel("Aby kontynuowa"+Letter.CI.getLetter()+" dalej,");
         description.setForeground(new Color(245, 245, 245));
         add(description);
         
-        description1 = new JLabel("zaloguj się na swoje konto");
+        description1 = new JLabel("zaloguj si"+Letter.EHH.getLetter()+" na swoje konto");
         description1.setForeground(new Color(245, 245, 245));
         add(description1);
         
@@ -131,16 +132,16 @@ public class PanelCover extends javax.swing.JPanel {
     private void login(boolean login) {
         if(this.isLogin != login) {
             if(login) {
-                title.setText("Witaj użytkowniku!");
-                description.setText("Aby rozpocząć,");
-                description1.setText("podaj swoje dane i załóż konto");
-                button.setText("Załóż konto");
+                title.setText("Witaj u"+Letter.ZY.getLetter()+"ytkowniku!");
+                description.setText("Aby rozpocz"+Letter.OHH.getLetter()+Letter.CI.getLetter()+",");
+                description1.setText("podaj swoje dane i za"+Letter.ELL.getLetter()+Letter.UU.getLetter()+Letter.ZY.getLetter()+" konto");
+                button.setText("Za"+Letter.ELL.getLetter()+Letter.UU.getLetter()+Letter.ZY.getLetter()+" konto");
             }
             else {
-                title.setText("Witaj użytkowniku!");
-                description.setText("Aby kontynuować dalej,");
-                description1.setText("zaloguj się na swoje konto"); 
-                button.setText("Zaloguj się");
+                title.setText("Witaj u"+Letter.ZY.getLetter()+"ytkowniku!");
+                description.setText("Aby kontynuowa"+Letter.CI.getLetter()+" dalej,");
+                description1.setText("zaloguj si"+Letter.EHH.getLetter()+" na swoje konto"); 
+                button.setText("Zaloguj si"+Letter.EHH.getLetter());
             }
             this.isLogin = login;
         }

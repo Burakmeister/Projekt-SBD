@@ -7,7 +7,7 @@
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="connection.url">jdbc:mysql://localhost:3306/projekt</property>
     <property name="connection.username">root</property>
-    <property name="connection.password">Som83417</property>
+    <property name="connection.password">BURAK</property>
     <property name="show_sql">true</property>
     
     <mapping class="map.Adres"/>

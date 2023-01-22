@@ -12,62 +12,61 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
  * @author BURAK
  */
 public abstract class DAO<T> {
-protected Class<T> modelClass;
 
-private SessionFactory sf = HibernateUtil.getSessionFactory();
+    protected Class<T> modelClass;
 
-public void setmodelClass(Class<T> modelClass) {
-    this.modelClass = modelClass;
-}
+    private SessionFactory sf = HibernateUtil.getSessionFactory();
 
-protected final Session getSession() {
-    Session session = null;
-    try {
-        session = this.sf.getCurrentSession();
-    } catch (HibernateException e) {
-        System.out.println(e.getMessage());
+    public void setmodelClass(Class<T> modelClass) {
+        this.modelClass = modelClass;
     }
 
-    if (session == null)
-        session = sf.openSession();
+    protected final Session getSession() {
+        Session session = null;
+        try {
+            session = this.sf.getCurrentSession();
+        } catch (HibernateException e) {
+            System.out.println(e.getMessage());
+        }
 
-    return session;
-}
+        if (session == null) {
+            session = sf.openSession();
+        }
 
-protected final Transaction getTransaction(Session session) {
-    Transaction tx = session.getTransaction();
-    if (!TransactionStatus.ACTIVE.equals(tx.getStatus()))
-        tx = session.beginTransaction();
+        return session;
+    }
 
-    return tx;
-}
+    protected final Transaction getTransaction(Session session) {
+        Transaction tx = session.getTransaction();
+        if (!TransactionStatus.ACTIVE.equals(tx.getStatus())) {
+            tx = session.beginTransaction();
+        }
 
-public final void create(T obj) {
-    Session session = this.getSession();
-    Transaction tx = this.getTransaction(session);
-    session.save(obj);
-    tx.commit();
-}
+        return tx;
+    }
 
-public final void delete(T obj) {
-    Session session = this.getSession();
-    Transaction tx = this.getTransaction(session);
-    session.delete(obj);
-    tx.commit();
-}
+    public final void create(T obj) {
+        Session session = this.getSession();
+        Transaction tx = this.getTransaction(session);
+        session.save(obj);
+        tx.commit();
+    }
 
-public final void update(T obj) {
-    Session session = this.getSession();
-//    session.merge(obj);
-    Transaction tx = this.getTransaction(session);
-    session.update(obj);
-    tx.commit();
-//    session.close();
-}
+    public final void delete(T obj) {
+        Session session = this.getSession();
+        Transaction tx = this.getTransaction(session);
+        session.delete(obj);
+        tx.commit();
+    }
 
-public T getById(Long id) {
-    return getSession().get(modelClass, id);
-}
+    public final void update(T obj) {
+        Session session = this.getSession();
+        Transaction tx = this.getTransaction(session);
+        session.update(obj);
+        tx.commit();
+    }
 
-    public abstract List<T> search(T criteria);
+    public T getById(Long id) {
+        return getSession().get(modelClass, id);
+    }
 }

@@ -31,6 +31,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import view.Image;
+import view.Letter;
 import view.MainFrame;
 import static view.layouts.ListPanel.scale;
 
@@ -49,8 +50,6 @@ public class ShopLayout extends JPanel implements ActionListener {
     private JPanel categoryPanel;
     private JButton addCategory;
     private JList<String> list;
-    private JComboBox cardinality;
-    private JComboBox category;
 
     private JTextField nameField;
     private JTextArea descField;
@@ -106,7 +105,7 @@ public class ShopLayout extends JPanel implements ActionListener {
 
     private void makeCategoryPanel() {
         if (admin) {
-            this.addCategory = new JButton("<html>" + "  Dodaj" + "<br>" + "kategorię" + "</html>");
+            this.addCategory = new JButton("<html>" + "  Dodaj" + "<br>" + "kategori"+Letter.EHH.getLetter() + "</html>");
             addCategory.setPreferredSize(new Dimension(this.categoryPanel.getBounds().width, this.categoryPanel.getBounds().width/2));
             this.addCategory.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 30)));
             this.categoryPanel.add(addCategory, BorderLayout.SOUTH);
@@ -179,6 +178,10 @@ public class ShopLayout extends JPanel implements ActionListener {
     public void refreshProduct(Produkt produkt) {
         this.mainPanel.refreshProduct(produkt);
     }
+    
+    public void updateAvailability(){
+        this.mainPanel.updateAvailability();
+    }
 
     public void updateCategoryList() {
         DefaultListModel<String> model = new DefaultListModel<>();
@@ -196,7 +199,7 @@ public class ShopLayout extends JPanel implements ActionListener {
             {
                 Object[] options = {"OK"};
                 JOptionPane.showOptionDialog(null,
-                "Utworzono Kategorie",
+                "Utworzono Kategori"+Letter.EHH.getLetter(),
                 "",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -230,7 +233,7 @@ public class ShopLayout extends JPanel implements ActionListener {
                 mf.showCart();
                 mf.refreshCategoryPanel(false);
             } else {
-                System.out.println("Przechodzisz do magazynów");
+                System.out.println("Przechodzisz do magazyn"+Letter.UU.getLetter()+"w");
                 MainFrame mf = (MainFrame) SwingUtilities.getWindowAncestor(this);
                 mf.showWarehouse();
                 mf.refreshCategoryPanel(true);
@@ -248,7 +251,7 @@ public class ShopLayout extends JPanel implements ActionListener {
 
             mainPanel.clearProductsPanel();
             int[] selectedIndices = list.getSelectedIndices();
-            ArrayList<String> categories = new ArrayList<String>();
+            ArrayList<String> categories = new ArrayList<>();
             for (int i = 0; i < selectedIndices.length; i++) {
                 System.out.println(list.getModel().getElementAt(selectedIndices[i]));
                 categories.add(list.getModel().getElementAt(selectedIndices[i]));
@@ -261,7 +264,7 @@ public class ShopLayout extends JPanel implements ActionListener {
         Object[] options = {"Tak",
             "Nie, wróć do sklepu"};
         int n = JOptionPane.showOptionDialog(null,
-                "Czy na pewno chcesz się wylogować?",
+                "Czy na pewno chcesz się wylogowa"+Letter.CI.getLetter()+"?",
                 "",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -270,7 +273,7 @@ public class ShopLayout extends JPanel implements ActionListener {
                 options[1]);
         if (n == 0) {
             logOutMessagePopUp();
-            System.out.println("Wylogowujesz sie");
+            System.out.println("Wylogowujesz si"+Letter.EHH.getLetter());
             MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
             this.setVisible(false);
             mf.showLogInPanel();
@@ -280,7 +283,7 @@ public class ShopLayout extends JPanel implements ActionListener {
     }
 
     private void logOutMessagePopUp() {
-        JOptionPane.showMessageDialog(null, "Nastąpiło wylogowanie", "", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Nast"+Letter.OHH.getLetter()+"pi"+Letter.ELL.getLetter()+"o wylogowanie", "", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void addedCategoryPopUp() {
@@ -300,7 +303,7 @@ public class ShopLayout extends JPanel implements ActionListener {
         myPanel.add(scrollPane);
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Podaj nazwę i opis kategorii", JOptionPane.OK_CANCEL_OPTION);
+                "Podaj nazw"+Letter.OHH.getLetter()+"pi"+Letter.EHH.getLetter()+" i opis kategorii", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             KategoriaDao dao = new KategoriaDao();
             dao.addKategoria(nameField.getText(), descField.getText());

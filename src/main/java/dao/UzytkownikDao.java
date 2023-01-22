@@ -14,11 +14,6 @@ public class UzytkownikDao extends DAO<Uzytkownik> {
         this.setmodelClass(map.Uzytkownik.class);
     }
 
-    @Override
-    public List<Uzytkownik> search(Uzytkownik criteria) {
-        return null;
-    }
-
     public Uzytkownik getUser(String password, String login) {
         System.out.println(password + "  " + login);
         Session session = this.getSession();
