@@ -38,7 +38,7 @@ public class PanelLoginAndRegister extends JPanel {
     private MyTextField txtUserLog;
 
     private MyPasswordField txtPassReg;
-    
+
     private static Uzytkownik uzytkownik;
 
     public PanelLoginAndRegister() {
@@ -48,30 +48,30 @@ public class PanelLoginAndRegister extends JPanel {
         login.setVisible(false);
         register.setVisible(true);
     }
-    
+
     public static Uzytkownik getUzytkownik() {  // metoda do uzyskiwania aktualnie zalogowanego użytkownika
         return uzytkownik;
     }
-    
+
     public void setUzytkownik(Uzytkownik uzytkownik) {
         this.uzytkownik = uzytkownik;
     }
 
     private void initRegister() {
         register.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]10[]25[]push"));  // push[center] aby wszystko do środka kolumny w layoucie, push[] do środka rzędu
-        JLabel label = new JLabel("Utw"+Letter.UU.getLetter()+"rz konto");
+        JLabel label = new JLabel("Utw" + Letter.UU.getLetter() + "rz konto");
         label.setFont(new Font("sansserif", 1, 30));
         label.setForeground(new Color(196, 53, 53));    // 196, 53, 53 - czerwony do tekstu
         register.add(label);
 
         MyTextField txtUser = new MyTextField();
         txtUser.setPrefixIcon(new ImageIcon("src/main/icons/user_login.png"));
-        txtUser.setHint("Nazwa u"+Letter.ZY.getLetter()+"ytkownika");
+        txtUser.setHint("Nazwa u" + Letter.ZY.getLetter() + "ytkownika");
         register.add(txtUser, "w 60%");
 
         MyTextField txtname = new MyTextField();
         txtname.setPrefixIcon(new ImageIcon("src/main/icons/user_login.png"));
-        txtname.setHint("Imi"+Letter.EHH.getLetter());
+        txtname.setHint("Imi" + Letter.EHH.getLetter());
         register.add(txtname, "w 60%");
 
         MyTextField txtsurname = new MyTextField();
@@ -86,38 +86,44 @@ public class PanelLoginAndRegister extends JPanel {
 
         txtPassReg = new MyPasswordField();
         txtPassReg.setPrefixIcon(new ImageIcon("src/main/icons/password.png"));
-        txtPassReg.setHint("Has"+Letter.ELL.getLetter()+"o");
-        register.add(txtPassReg, "w 60%");        
+        txtPassReg.setHint("Has" + Letter.ELL.getLetter() + "o");
+        register.add(txtPassReg, "w 60%");
 
         MyPasswordField txtPass2 = new MyPasswordField();
         txtPass2.setPrefixIcon(new ImageIcon("src/main/icons/password.png"));
-        txtPass2.setHint("Powt"+Letter.UU.getLetter()+"rz has"+Letter.ELL.getLetter()+"o");
+        txtPass2.setHint("Powt" + Letter.UU.getLetter() + "rz has" + Letter.ELL.getLetter() + "o");
         register.add(txtPass2, "w 60%");
 
         Button cmd = new Button();
         cmd.setBackground(new Color(196, 53, 53));
         cmd.setForeground(new Color(250, 250, 250));
-        cmd.setText("Stw"+Letter.UU.getLetter()+"rz konto");
+        cmd.setText("Stw" + Letter.UU.getLetter() + "rz konto");
         register.add(cmd, "w 40%, h 40");
 
-        cmd.addActionListener(new ActionListener() {    // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
-            public void actionPerformed(ActionEvent e) {
-
-                UzytkownikDao dao = new UzytkownikDao();
-                Uzytkownik user = new Uzytkownik();
-                String login = txtUser.getText(), pass = txtPassReg.getText(), name = txtname.getText(), surname = txtsurname.getText(), email = txtEmail.getText(), pass2 = txtPass2.getText();
-                
-                if(!(txtname.getText().matches("[a-zA-Z]+")) || !(txtsurname.getText().matches("[a-zA-Z]+")) || !txtEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {    // jeśli imie, naziwsko zawiera inne znaki niż litery i czy poprawny format emaila
-                    JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid"+Letter.ELL.getLetter()+"owy format danych.", "", JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-                
-                if (!"".equals(login) && !"".equals(pass) && !"".equals(name) && !"".equals(surname) && !"".equals(email) && pass.equals(pass2)) {
-                    user = dao.addUser(name, surname, login, pass, new Date(), email, false);
-                    
-                    //user = dao.getUser(pass, login);
-                    if (!"".equals(login) && !"".equals(pass)) {
-                    user = dao.getUser(pass, login);
+        cmd.addActionListener((ActionEvent e) -> {
+            UzytkownikDao dao = new UzytkownikDao();
+            Uzytkownik user;
+            String login1 = txtUser.getText();
+            String pass = txtPassReg.getText();
+            String name1 = txtname.getText();
+            String surname = txtsurname.getText();
+            String email = txtEmail.getText();
+            String pass2 = txtPass2.getText();
+            if (!txtname.getText().matches("[a-zA-Z]+") ) {    // jeśli imie, naziwsko zawiera inne znaki niż litery i czy poprawny format emaila
+                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe imi"+ Letter.EHH.getLetter() +".", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }else if(!(txtsurname.getText().matches("[a-zA-Z]+")) ){
+                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe nazwisko.", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }else if(!txtEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
+                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owy e-mail.", "", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if (!"".equals(login1) && !"".equals(pass) && !"".equals(name1) && !"".equals(surname) && !"".equals(email) && pass.equals(pass2)) {
+                user = dao.addUser(name1, surname, login1, pass, new Date(), email, false);
+                //user = dao.getUser(pass, login);
+                if (!"".equals(login1) && !"".equals(pass)) {
+                    user = dao.getUser(pass, login1);
                     setUzytkownik(user);
                     if (user != null) {
                         registrySuccesfull();
@@ -130,25 +136,23 @@ public class PanelLoginAndRegister extends JPanel {
                         frame.validate();
                         frame.repaint();
                         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
-                    }
-                    else{
+                    } else {
                         txtUserLog.setText("");
                         txtPassLog.setText("");
                         WrongCredentials();
                         
                     }
-                    }
                 }
-                else{
-                    WrongCredentials();
-                }
-                
+            } else {
+                WrongCredentials();
             }
-        });
+        } // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
+        );
     }
-        private void registrySuccesfull() {
-            Object[] options = {"Super!"};
-            int n = JOptionPane.showOptionDialog(null,
+
+    private void registrySuccesfull() {
+        Object[] options = {"Super!"};
+        JOptionPane.showOptionDialog(null,
                 "Gratulacje!! Zostaniesz przekierowany do sklepu",
                 "",
                 JOptionPane.YES_NO_CANCEL_OPTION,
@@ -156,11 +160,12 @@ public class PanelLoginAndRegister extends JPanel {
                 null,
                 options,
                 options[0]);
-            }
-       private void WrongCredentials()
-   {        Object[] options = {"OK"};
-               int n = JOptionPane.showOptionDialog(null,
-                "Bl"+Letter.EHH.getLetter()+"dne dane",
+    }
+
+    private void WrongCredentials() {
+        Object[] options = {"OK"};
+        JOptionPane.showOptionDialog(null,
+                "Bl" + Letter.EHH.getLetter() + "dne dane",
                 "",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -168,9 +173,9 @@ public class PanelLoginAndRegister extends JPanel {
                 options,
                 options[0]);
 
-            System.out.println("Bl"+Letter.EHH.getLetter()+"dne dane");
-   
-   }
+        System.out.println("Bl" + Letter.EHH.getLetter() + "dne dane");
+
+    }
 
     private void initLogin() {
         login.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]25[]push"));
@@ -181,15 +186,15 @@ public class PanelLoginAndRegister extends JPanel {
 
         txtUserLog = new MyTextField();
         txtUserLog.setPrefixIcon(new ImageIcon("src/main/icons/user_login.png"));
-        txtUserLog.setHint("Nazwa U"+Letter.ZY.getLetter()+"ytkownika");
+        txtUserLog.setHint("Nazwa U" + Letter.ZY.getLetter() + "ytkownika");
         login.add(txtUserLog, "w 60%");
 
         txtPassLog = new MyPasswordField();
         txtPassLog.setPrefixIcon(new ImageIcon("src/main/icons/password.png"));
-        txtPassLog.setHint("Has"+Letter.ELL.getLetter()+"o");
+        txtPassLog.setHint("Has" + Letter.ELL.getLetter() + "o");
         login.add(txtPassLog, "w 60%");
 
-        JButton cmdForget = new JButton("Nie pami"+Letter.EHH.getLetter()+"tasz has"+Letter.ELL.getLetter()+"a?");
+        JButton cmdForget = new JButton("Nie pami" + Letter.EHH.getLetter() + "tasz has" + Letter.ELL.getLetter() + "a?");
         cmdForget.setForeground(new Color(100, 100, 100));
         cmdForget.setFont(new Font("sansserif", 1, 12));
         cmdForget.setContentAreaFilled(false);
@@ -199,16 +204,16 @@ public class PanelLoginAndRegister extends JPanel {
         Button cmd = new Button();
         cmd.setBackground(new Color(196, 53, 53));
         cmd.setForeground(new Color(250, 250, 250));
-        cmd.setText("Zaloguj si"+Letter.EHH.getLetter());
+        cmd.setText("Zaloguj si" + Letter.EHH.getLetter());
         login.add(cmd, "w 40%, h 40");
 
         cmd.addActionListener(new ActionListener() {    // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
+            @Override
             public void actionPerformed(ActionEvent e) {
-
                 UzytkownikDao dao = new UzytkownikDao();
                 Uzytkownik user;
                 String login = txtUserLog.getText(), pass = txtPassLog.getText();
-                
+
                 if (!"".equals(login) && !"".equals(pass)) {
                     user = dao.getUser(pass, login);
                     setUzytkownik(user);
@@ -222,12 +227,11 @@ public class PanelLoginAndRegister extends JPanel {
                         frame.validate();
                         frame.repaint();
                         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
-                    }
-                    else{
-                    txtUserLog.setText("");
-                    txtPassLog.setText("");
-                    WrongCredentials();
-                        
+                    } else {
+                        txtUserLog.setText("");
+                        txtPassLog.setText("");
+                        WrongCredentials();
+
                     }
                 }
             }

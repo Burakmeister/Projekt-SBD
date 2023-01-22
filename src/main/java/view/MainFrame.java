@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,9 +25,9 @@ import map.Produkt;
 import map.Uzytkownik;
 import map.Zamowienie;
 import view.SacPackage.OrderPanel;
-import view.SacPackage.UzytForm;
 import view.layouts.CartLayout;
 import view.layouts.NewProduct;
+import view.layouts.UserLayout;
 import view.layouts.WarehouseLayout;
 
 public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na dole
@@ -127,6 +126,11 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         this.panels[0].setVisible(true);
     }
 
+    public void returnToShopFromUser() {
+        this.remove(this.panels[3]);
+        this.panels[0].setVisible(true);
+    }
+
     public void showLogInPanel() {
         this.getContentPane().removeAll();
         this.isLogin = false;
@@ -167,41 +171,42 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         HashMap<Produkt, Integer> products = new HashMap<>();
         List<Produkt> allProducts = zamowienie.getProdukt();
         allProducts.sort((Object o1, Object o2) -> {
-            Produkt p1 = (Produkt)o1;
-            Produkt p2 = (Produkt)o2;
-            if(p1.getIdProduktu()< p2.getIdProduktu()){
+            Produkt p1 = (Produkt) o1;
+            Produkt p2 = (Produkt) o2;
+            if (p1.getIdProduktu() < p2.getIdProduktu()) {
                 return 1;
-            }else if(p1.getIdProduktu()> p2.getIdProduktu()){
+            } else if (p1.getIdProduktu() > p2.getIdProduktu()) {
                 return -1;
             }
-            return 0;            
+            return 0;
         });
         products.put(allProducts.get(0), 1);
-        for(int i=1; i<allProducts.size(); i++){
-            if(products.containsKey(allProducts.get(i))){
-                products.put(allProducts.get(i), products.get(allProducts.get(i))+1);
+        for (int i = 1; i < allProducts.size(); i++) {
+            if (products.containsKey(allProducts.get(i))) {
+                products.put(allProducts.get(i), products.get(allProducts.get(i)) + 1);
             }
         }
         this.panels[3].setVisible(false);
-        this.panels[1] = new CartLayout();
-        CartLayout cl = (CartLayout)this.panels[1];
+        this.panels[1] = new WarehouseLayout();
+        add(this.panels[1]);
+        WarehouseLayout cl = (WarehouseLayout) this.panels[1];
         this.panels[1].setVisible(true);
-        for(Produkt p: products.keySet()){
-            for(Integer i: products.values()){
-                for(int j=0; j<i; j++){
+        for (Produkt p : products.keySet()) {
+            for (Integer i : products.values()) {
+                for (int j = 0; j < i; j++) {
                     cl.addProduct(p);
                 }
             }
         }
     }
-    
-    public List<Produkt> getProductsFromCart(){
+
+    public List<Produkt> getProductsFromCart() {
         List<Produkt> ret = new ArrayList<>();
-        CartLayout cl = (CartLayout)this.panels[2];
+        CartLayout cl = (CartLayout) this.panels[2];
         List<Produkt> products = cl.getProducts();
         List<Integer> ints = cl.getNumOfProducts();
-        for(int i=0; i<products.size(); i++){
-            for(int j=0; j<ints.get(i); j++){
+        for (int i = 0; i < products.size(); i++) {
+            for (int j = 0; j < ints.get(i); j++) {
                 ret.add(products.get(i));
             }
         }
@@ -217,7 +222,7 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         } else {
             this.panels[2] = new CartLayout();
         }
-        this.panels[3] = new UzytForm(user);
+        this.panels[3] = new UserLayout(user);
 
         this.add(this.panels[2]);
         this.add(this.panels[3]);
