@@ -432,4 +432,9 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
     public static boolean itWasScalling() {
         return MainFrame.wasScalling;
     }
+
+    public void returnToUserFromOrderDetails() {
+        this.remove(this.panels[1]);
+        this.panels[3].setVisible(true);
+    }
 }

@@ -44,6 +44,7 @@ import map.Kategoria;
 import map.Magazyn;
 import map.Producent;
 import map.Produkt;
+import view.Letter;
 import view.MainFrame;
 import static view.layouts.ListPanel.scale;
 
@@ -144,18 +145,21 @@ public class Details extends JPanel implements ActionListener {
 
         JPanel textInputsPanel = new JPanel();
         textInputsPanel.setBackground(new Color(188, 69, 69));
-        textInputsPanel.setLayout(new GridBagLayout());  //new GridLayout(4, 2, 0, 0)
+        textInputsPanel.setLayout(new GridBagLayout());
         textPanel.add(textInputsPanel);
 
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
         if (isAdmin) {
+            int[] indices = null;
             List<Magazyn> wybraneMagazyny = produkt.getMagazyn();
-            int[] indices = new int[wybraneMagazyny.size()];
-            int index = 0;
-            for (Magazyn mag : wybraneMagazyny) {
-                indices[index] = (mag.getIdMagazynu() - 1);
-                index++;
+            if (wybraneMagazyny != null) {
+                indices = new int[wybraneMagazyny.size()];
+                int index = 0;
+                for (Magazyn mag : wybraneMagazyny) {
+                    indices[index] = (mag.getIdMagazynu() - 1);
+                    index++;
+                }
             }
 
             MagazynDao dao = new MagazynDao();
@@ -165,11 +169,12 @@ public class Details extends JPanel implements ActionListener {
             list.setForeground(Color.white);
             list.setBackground(Color.black);
             for (Magazyn magazyn : magazyny) {
-//                model.addElement("Magazyn" + String.valueOf(magazyn.getIdMagazynu()));
                 model.addElement(String.valueOf(magazyn.getIdMagazynu()));
             }
 
-            this.list.setSelectedIndices(indices);
+            if (wybraneMagazyny != null) {
+                this.list.setSelectedIndices(indices);
+            }
 
             list.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 40)));
             JPanel magazins = new JPanel();
@@ -411,23 +416,23 @@ public class Details extends JPanel implements ActionListener {
                         produkt.setOpis(descTextArea.getText());
                         produkt.setProducent(prod);
                         produkt.setMasa(Float.parseFloat(mass.getText()));
-                        
+
                         List<Magazyn> magTemp = produkt.getMagazyn();
                         ArrayList<Magazyn> newMags = new ArrayList<>();
                         boolean isExist;
-                        for(Magazyn magazyn: magazyny_produktu){
-                            isExist=false;
-                            for(Magazyn mCur: magTemp){
-                                if(magazyn.equals(mCur)){
+                        for (Magazyn magazyn : magazyny_produktu) {
+                            isExist = false;
+                            for (Magazyn mCur : magTemp) {
+                                if (magazyn.equals(mCur)) {
                                     newMags.add(magazyn);
                                     isExist = true;
                                 }
                             }
-                            if(!isExist){
+                            if (!isExist) {
                                 newMags.add(magazyn);
                             }
                         }
-                        
+
                         produkt.setMagazyn(newMags);
                         produkt.setLiczbaSztuk(produkt.getMagazyn().size());
 
@@ -463,10 +468,9 @@ public class Details extends JPanel implements ActionListener {
     }
 
     private void produktPopPup() {
-
         Object[] options = {"OK"};
         JOptionPane.showOptionDialog(null,
-                "Produkt zosta? zaktualizowany",
+                "Produkt zosta"+ Letter.ELL.getLetter() +" zaktualizowany",
                 "",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,

@@ -47,7 +47,6 @@ public class WarehouseLayout extends JPanel implements ActionListener {
     private JButton saveButton;
 
     private JButton addMagazin;
-    private JLabel logo;
     private JTextField cityField;
     private JTextField zipCodeField;
     private JTextField streetField;
@@ -62,6 +61,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
     private ArrayList<JButton> warehousesBut;
     private ArrayList<Magazyn> warehouses = new ArrayList<>();
     private int idxWarehouse = 0;
+    private int numOfProducts;
 
     public WarehouseLayout() {
         this.setLayout(null);
@@ -70,13 +70,6 @@ public class WarehouseLayout extends JPanel implements ActionListener {
         this.setBackground(Color.WHITE);
 
         this.upPanel = new JPanel();
-//        {
-//            @Override
-//            public void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                Graphics2D g2d = (Graphics2D) g;
-//                g2d.drawImage(Image.LOGO.icon.getImage(), Toolkit.getDefaultToolkit().getScreenSize().width / 2, -borderPx, null);
-//            }
 //        };
         this.categoryPanel = new JPanel();
 
@@ -122,11 +115,12 @@ public class WarehouseLayout extends JPanel implements ActionListener {
             massFloat += p.getMasa() * (int) (numOfProducts.get(i));
             i++;
         }
+        this.numOfProducts = numOf;
         quantity.setText(String.valueOf(numOf));
         if (sumFloat * 100 % 10 == 0) {
-            sum.setText(String.valueOf(Math.round(sumFloat * 100) / 100.0) + "0z"+Letter.ELL.getLetter());
+            sum.setText(String.valueOf(Math.round(sumFloat * 100) / 100.0) + "0z" + Letter.ELL.getLetter());
         } else {
-            sum.setText(String.valueOf(Math.round(sumFloat * 100) / 100.0) + "z"+Letter.ELL.getLetter());
+            sum.setText(String.valueOf(Math.round(sumFloat * 100) / 100.0) + "z" + Letter.ELL.getLetter());
         }
 
         if (massFloat * 100 % 10 == 0) {
@@ -142,6 +136,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
         addMagazin.setPreferredSize(new Dimension(categoryPanel.getSize().width, (int) (3 * 40 * scale)));
         addMagazin.addActionListener(this);
         addMagazin.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 40)));
+
         this.categoryPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         sum = new JLabel();
         sum.setFont(font);
@@ -158,11 +153,11 @@ public class WarehouseLayout extends JPanel implements ActionListener {
         mass.setForeground(Color.white);
         mass.setPreferredSize(new Dimension(this.categoryPanel.getSize().width - 2 * borderPx, this.categoryPanel.getSize().width / 3));
 
-        JLabel tmp1 = new JLabel("Warto"+Letter.SII.getLetter()+Letter.CI.getLetter()+":");
+        JLabel tmp1 = new JLabel("Warto" + Letter.SII.getLetter() + Letter.CI.getLetter() + ":");
         tmp1.setFont(font);
         tmp1.setForeground(Color.white);
 
-        JLabel tmp2 = new JLabel("Liczno"+Letter.SII.getLetter()+Letter.CI.getLetter()+":");
+        JLabel tmp2 = new JLabel("Liczno" + Letter.SII.getLetter() + Letter.CI.getLetter() + ":");
         tmp2.setFont(font);
         tmp2.setForeground(Color.white);
 
@@ -218,7 +213,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
 
     private void makeMainPanel() {
         this.mainPanel = new Cart(new Dimension(getPreferredSize().width - 3 * borderPx - this.getPreferredSize().width / 10,
-                this.getPreferredSize().height - this.getPreferredSize().height / 8 - 8 * borderPx), 20, true);
+                this.getPreferredSize().height - this.getPreferredSize().height / 8 - 8 * borderPx), 20, 0);
         this.mainPanel.setLayout(null);
         this.mainPanel.setBackground(new Color(188, 69, 69));
 
@@ -283,7 +278,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
         apartNumField = new JTextField();
         apartNumField.setFont(font);
 
-        JLabel capacity = new JLabel("Pojemno"+Letter.SII.getLetter()+Letter.CI.getLetter()+":");
+        JLabel capacity = new JLabel("Pojemno" + Letter.SII.getLetter() + Letter.CI.getLetter() + ":");
         capacity.setFont(font);
         capacity.setForeground(Color.WHITE);
         capacityField = new JTextField();
@@ -347,6 +342,12 @@ public class WarehouseLayout extends JPanel implements ActionListener {
             Adres adresTemp = this.warehouses.get(this.idxWarehouse).getAdres();
             Magazyn magazynTemp = this.warehouses.get(this.idxWarehouse);
             try {
+                if (Integer.parseInt(this.capacityField.getText()) > this.numOfProducts) {
+                    magazynTemp.setPojemnosc(Integer.parseInt(this.capacityField.getText()));
+                } else {
+                    this.capacityField.setText(String.valueOf(magazynTemp.getPojemnosc()));
+                    this.capacityOutPopUp();
+                }
                 int tmp = Integer.parseInt(this.zipCodeField.getText());
                 adresTemp.setKodPocztowy(tmp);
                 adresTemp.setMiasto(this.cityField.getText());
@@ -363,9 +364,9 @@ public class WarehouseLayout extends JPanel implements ActionListener {
 
                 adresTemp.setZamowienie(null);
                 aDao.update(adresTemp);
-
+                this.refreshCategoryPanel();
             } catch (NumberFormatException ex) {
-                System.out.print("Nieprawid"+Letter.ELL.getLetter()+"owe dane!");
+                System.out.print("Nieprawid" + Letter.ELL.getLetter() + "owe dane!");
                 this.wrongDataPopUp();
                 adresTemp = this.warehouses.get(this.idxWarehouse).getAdres();
                 this.cityField.setText(adresTemp.getMiasto());
@@ -386,28 +387,41 @@ public class WarehouseLayout extends JPanel implements ActionListener {
                 tempProductsCur = this.mainPanel.getProducts();
                 tempCur = this.mainPanel.getNumOfProducts();
 
+                int numTemp = 0;
+
                 for (int i = 0; i < tempProductsCur.size(); i++) {
                     for (int n = 0; n < tempCur.get(i); n++) {
                         products.add(tempProductsCur.get(i));
+                        numTemp++;
                     }
                 }
-                magazynTemp.setPojemnosc(Integer.parseInt(this.capacityField.getText()));
-                magazynTemp.setProdukt(products);
-                this.warehouses.set(this.idxWarehouse, magazynTemp);
-                mDao.update(magazynTemp);
+                System.out.println("Liczba productow current: " + numTemp);
 
-                ProduktDao pDao = new ProduktDao();
-                ArrayList<Produkt> productsTmp = pDao.getAll();
-                for (int i = 0; i < productsTmp.size(); i++) {
-                    if (productsTmp.get(i).getMagazyn() != null) {
-                        int temp = productsTmp.get(i).getMagazyn().size();
-                        productsTmp.get(i).setLiczbaSztuk(temp);
-                        pDao.update(productsTmp.get(i));
+                if (numTemp <= magazynTemp.getPojemnosc()) {
+                    magazynTemp.setProdukt(products);
+                    this.warehouses.set(this.idxWarehouse, magazynTemp);
+                    mDao.update(magazynTemp);
+
+                    ProduktDao pDao = new ProduktDao();
+                    ArrayList<Produkt> productsTmp = pDao.getAll();
+                    for (int i = 0; i < productsTmp.size(); i++) {
+                        if (productsTmp.get(i).getMagazyn() != null) {
+                            int temp = productsTmp.get(i).getMagazyn().size();
+                            productsTmp.get(i).setLiczbaSztuk(temp);
+                            pDao.update(productsTmp.get(i));
+                        }
+                    }
+                    MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
+                    mf.updateAvailability();
+                } else {
+                    this.capacityOutPopUp();
+                    this.mainPanel.removeAll();
+                    for (Produkt p : magazynTemp.getProdukt()) {
+                        this.mainPanel.addProdukt(p, false);
                     }
                 }
-                MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-                mf.updateAvailability();
             }
+            this.refreshCategoryPanel();
         }
     }
 
@@ -469,7 +483,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
         apartNumField.setFont(font);
         apartNumField.setText("");
 
-        JLabel volume = new JLabel("Pojemno"+Letter.SII.getLetter()+Letter.CI.getLetter());
+        JLabel volume = new JLabel("Pojemno" + Letter.SII.getLetter() + Letter.CI.getLetter());
         volume.setFont(font);
         volume.setForeground(Color.BLACK);
 
@@ -518,7 +532,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
                 this.emptyFieldPopUp("nr budynku");
                 addMagazinePopUp(address, cityField, zipCodeField, streetField, buildNumField, apartNumField, volumeSpinner);
             } else if ("".equals(volumeSpinner)) {
-                this.emptyFieldPopUp("pojemno"+Letter.SII.getLetter()+Letter.CI.getLetter());
+                this.emptyFieldPopUp("pojemno" + Letter.SII.getLetter() + Letter.CI.getLetter());
                 addMagazinePopUp(address, cityField, zipCodeField, streetField, buildNumField, apartNumField, volumeSpinner);
             } else {
                 try {
@@ -563,7 +577,7 @@ public class WarehouseLayout extends JPanel implements ActionListener {
                     this.categoryPanel.add(temp, BorderLayout.CENTER);
                     this.categoryPanel.validate();
                 } catch (NumberFormatException e) {
-                    System.out.println("Wprowadzono niew"+Letter.ELL.getLetter()+"a"+Letter.SII.getLetter()+"ciwe dane!");
+                    System.out.println("Wprowadzono niew" + Letter.ELL.getLetter() + "a" + Letter.SII.getLetter() + "ciwe dane!");
                     this.wrongDataPopUp();
                     addMagazinePopUp(address, cityField, zipCodeField, streetField, buildNumField, apartNumField, volumeSpinner);
                 }
@@ -576,7 +590,11 @@ public class WarehouseLayout extends JPanel implements ActionListener {
     }
 
     private void wrongDataPopUp() {
-        JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid"+Letter.ELL.getLetter()+"owy typ danych!", "", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owy typ danych!", "", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void capacityOutPopUp() {
+        JOptionPane.showMessageDialog(null, "Przekroczono pojemno" + Letter.SII.getLetter() + Letter.CI.getLetter() + " magazynu!", "", JOptionPane.ERROR_MESSAGE);
     }
 
     public void addWarehouseProduct(Produkt produkt) {
