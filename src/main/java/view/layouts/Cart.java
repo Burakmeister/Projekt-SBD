@@ -197,13 +197,9 @@ public class Cart extends JPanel {
                 removeProdukt(tmp);
             }
         });
-        toDetails.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
-                frame.showProductPanelCart(produkt);
-            }
-            
+        toDetails.addActionListener((ActionEvent e) -> {
+            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
+            frame.showProductPanelCart(produkt);
         });
         shortText.setForeground(Color.WHITE);
         shortText.setBackground(Color.BLACK);
@@ -230,104 +226,6 @@ public class Cart extends JPanel {
             frame.refreshCategoryPanel(false);
         }
     }
-//
-//    public void addProduktOrder(Produkt produkt) {
-//        for (int i = 0; i < this.list.size(); i++) {
-//            if (this.list.get(i).getIdProduktu() == produkt.getIdProduktu()) {
-//                int integ = (Integer) this.spiners.get(i).getValue();
-//                integ++;
-//                this.spiners.get(i).setValue(integ);
-//                return;
-//            }
-//        }
-//        
-//        JButton toDetails;
-//        JTextArea shortText;
-//        JSpinner spinner;
-//
-//        SpinnerModel model = null;
-//        model = new SpinnerNumberModel(1, 1, 100000, 1);
-//
-//        spinner = new JSpinner(model);
-//        spinner.addChangeListener((ChangeEvent e) -> {
-//            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
-//            if (this.option == 1) {
-//                frame.refreshCategoryPanel(false);
-//            }
-//        });
-//        spinner.setFont(font);
-//        toDetails = new JButton(Image.DETAILS.icon);
-//        shortText = new JTextArea(produkt.getNazwaProduktu());
-//
-//        shortText.setFont(font);
-//        shortText.setLineWrap(true);
-//        shortText.setWrapStyleWord(true);
-//        shortText.setEditable(false);
-//        int tmp = this.list.size();
-//
-//        switch (tmp % 3) {
-//            case 0:
-//                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
-//                        imageWidth * 2,
-//                        imageHeight / 2);
-//                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                break;
-//            case 1:
-//                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
-//                        imageWidth * 2,
-//                        imageHeight / 2);
-//                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3 + 4 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                break;
-//            default:
-//                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx + 8 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
-//                        imageWidth * 2,
-//                        imageHeight / 2);
-//                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx + 8 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3 + 8 * imageWidth,
-//                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
-//                        2 * imageWidth / 3,
-//                        imageHeight / 2);
-//                break;
-//        }
-//
-//        toDetails.addActionListener((ActionEvent e) -> {
-//            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
-//            frame.showProductPanelCart(produkt);
-//        });
-//        shortText.setForeground(Color.WHITE);
-//        shortText.setBackground(Color.BLACK);
-//        toDetails.setBackground(Color.black);
-//
-//        this.toDetailsButton.add(toDetails);
-//        this.spiners.add(spinner);
-//        this.shortTextLabel.add(shortText);
-//
-//        this.add(shortText);
-//        this.add(toDetails);
-//        this.add(spinner);
-//
-//        this.repaint();
-//    }
 
     public void removeProdukt(int index) {
         int max = this.list.size() - 1;

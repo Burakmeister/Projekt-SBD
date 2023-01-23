@@ -95,8 +95,10 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
     }
 
     public void showProductPanelCart(Produkt produkt) {
-        this.temp = this.panels[1];
-        this.remove(this.panels[1]);
+        if(this.panels[1] instanceof OrderDetails)
+            this.temp = this.panels[1];
+        if(this.panels[1]!=null)
+            this.remove(this.panels[1]);
         this.panels[1] = new Details(produkt, user.isUprawnieniaAdministratora(), true);
         this.panels[2].setVisible(false);
         this.panels[3].setVisible(false);
