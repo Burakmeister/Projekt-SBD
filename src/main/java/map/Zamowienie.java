@@ -61,6 +61,7 @@ public class Zamowienie {
 
     public Zamowienie(String uwagiDoZamowienia,
             Adres adres, SposobRealizacji sposobRealizacji, Uzytkownik uzytkownik) {
+//		this.dataGodzina = dataGodzina;    Date dataGodzina,
         this.uwagiDoZamowienia = uwagiDoZamowienia;
         this.adres = adres;
         this.sposobRealizacji = sposobRealizacji;
@@ -115,10 +116,19 @@ public class Zamowienie {
         this.uzytkownik = uzytkownik;
     }
 
+    //public List<SztukiProduktu> getSztukiProduktu() {
+    //	return this.sztukiProduktu;
+    //}
     public List<Produkt> getProdukt() {
         return this.produkt;
     }
+    //public List<SztukiProduktu> getSztukiProduktu() {
+    //	return this.sztukiProduktu;
+    //}
 
+    //public void setSztukiProduktu(List<SztukiProduktu> sztukiProduktu) {
+    //	this.sztukiProduktu = sztukiProduktu;
+    //}
     public void setProdukt(List<Produkt> produkt) {
         this.produkt = produkt;  //nowe
     }

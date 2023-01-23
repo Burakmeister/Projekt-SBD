@@ -27,7 +27,6 @@ import map.Zamowienie;
 import view.SacPackage.OrderPanel;
 import view.layouts.CartLayout;
 import view.layouts.NewProduct;
-import view.layouts.OrderDetails;
 import view.layouts.UserLayout;
 import view.layouts.WarehouseLayout;
 
@@ -46,8 +45,6 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
     private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));  // patrz fractionCover = Double... , po prostu inaczej nie dziaĹ‚aĹ‚o
 
     // Z ShopFrame
-    private JPanel temp;
-
     private JPanel[] panels; //0-shopLayout  1-tymczasowe  2-koszyk   3-userConfig
     //
 
@@ -95,11 +92,8 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
     }
 
     public void showProductPanelCart(Produkt produkt) {
-        this.temp = this.panels[1];
-        this.remove(this.panels[1]);
         this.panels[1] = new Details(produkt, user.isUprawnieniaAdministratora(), true);
         this.panels[2].setVisible(false);
-        this.panels[3].setVisible(false);
         this.add(panels[1]);
     }
 
@@ -118,16 +112,8 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
     }
 
     public void returnToCart() {
-        if (this.temp != null) {
-            this.remove(this.panels[1]);
-            this.panels[1] = temp;
-            this.add(panels[1]);
-            panels[1].repaint();
-            temp=null;
-        } else {
-            this.remove(this.panels[1]);
-            this.panels[2].setVisible(true);
-        }
+        this.remove(this.panels[1]);
+        this.panels[2].setVisible(true);
     }
 
     public void returnToShop() {
@@ -201,9 +187,9 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
             }
         }
         this.panels[3].setVisible(false);
-        this.panels[1] = new OrderDetails(zamowienie);
+        this.panels[1] = new WarehouseLayout();
         add(this.panels[1]);
-        OrderDetails cl = (OrderDetails) this.panels[1];
+        WarehouseLayout cl = (WarehouseLayout) this.panels[1];
         this.panels[1].setVisible(true);
         for (Produkt p : products.keySet()) {
             for (Integer i : products.values()) {
@@ -236,7 +222,7 @@ public class MainFrame extends javax.swing.JFrame {     // gĹ‚Ăłwny main na
         } else {
             this.panels[2] = new CartLayout();
         }
-        this.panels[3] = new UserLayout(user, this.user.isUprawnieniaAdministratora());
+        this.panels[3] = new UserLayout(user);
 
         this.add(this.panels[2]);
         this.add(this.panels[3]);

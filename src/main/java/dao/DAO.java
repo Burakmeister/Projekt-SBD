@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,13 +10,12 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 /**
  *
  * @author BURAK
- * @param <T>
  */
 public abstract class DAO<T> {
 
     protected Class<T> modelClass;
 
-    private final SessionFactory sf = HibernateUtil.getSessionFactory();
+    private SessionFactory sf = HibernateUtil.getSessionFactory();
 
     public void setmodelClass(Class<T> modelClass) {
         this.modelClass = modelClass;

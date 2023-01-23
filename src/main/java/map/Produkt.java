@@ -1,5 +1,6 @@
 package map;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -158,18 +159,30 @@ public class Produkt {
         this.liczbaSztuk = liczbaSztuk;
     }
 
+    //public List<SztukiProduktu> getSztukiProduktu() {
+    //	return sztukiProduktu;
+    //}
     public List<Zamowienie> getzamowienie() { //
         return zamowienie;
     }
 
+    //public void setSztukiProduktu(List<SztukiProduktu> sztukiProduktu) {
+    //	this.sztukiProduktu = sztukiProduktu;
+    //}
     public void setZamowienie(List<Zamowienie> zamowienie) { //
         this.zamowienie = zamowienie;
     }
 
+    //public List<ProduktMagazyn> getProduktMagazyn() {
+    //	return produktMagazyn;
+    //}
     public List<Magazyn> getMagazyn() {
         return magazyn;
     }
 
+    //public void setProduktMagazyn(List<ProduktMagazyn> produktMagazyn) {
+    //	this.produktMagazyn = produktMagazyn;
+    //}
     public void setMagazyn(List<Magazyn> magazyn) {
         this.magazyn = magazyn;
     }

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 import view.Letter;
 // Klasy rozszerzające
+import view.SacPackage.ButtonOutLine;
 
 /**
  *
@@ -25,7 +27,7 @@ public class PanelCover extends javax.swing.JPanel {
 
     private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));
     private ActionListener event;
-    private final MigLayout layout;
+    private MigLayout layout;
     private JLabel title;
     private JLabel description;
     private JLabel description1;
@@ -58,7 +60,11 @@ public class PanelCover extends javax.swing.JPanel {
         button.setBackground(new Color(255, 255, 255));
         button.setForeground(new Color(255, 255, 255));
         button.setText("Zaloguj się");
-        button.addActionListener(event::actionPerformed);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                event.actionPerformed(ae);
+            }
+        });
         add(button, "w 60%, h 40");
     }
     
@@ -92,7 +98,7 @@ public class PanelCover extends javax.swing.JPanel {
     }
 
     public void registerLeft(double v) {
-        v = Double.parseDouble(df.format(v));
+        v = Double.valueOf(df.format(v));
         login(false);
         layout.setComponentConstraints(title, "pad 0 -" + v + "% 0 0 ");
         layout.setComponentConstraints(description, "pad 0 -" + v + "% 0 0 ");
@@ -100,7 +106,7 @@ public class PanelCover extends javax.swing.JPanel {
     }
     
     public void registerRight(double v) {
-        v = Double.parseDouble(df.format(v));
+        v = Double.valueOf(df.format(v));
         login(false);
         layout.setComponentConstraints(title, "pad 0 -" + v + "% 0 0 ");
         layout.setComponentConstraints(description, "pad 0 -" + v + "% 0 0 ");
@@ -108,7 +114,7 @@ public class PanelCover extends javax.swing.JPanel {
     }
     
     public void loginLeft(double v) {
-        v = Double.parseDouble(df.format(v));
+        v = Double.valueOf(df.format(v));
         login(true);
         layout.setComponentConstraints(title, "pad 0 " + v + "% 0 " + v + "%");
         layout.setComponentConstraints(description, "pad 0 " + v + "% 0 " + v + "%");
@@ -116,7 +122,7 @@ public class PanelCover extends javax.swing.JPanel {
     }
     
     public void loginRight(double v) {
-        v = Double.parseDouble(df.format(v));
+        v = Double.valueOf(df.format(v));
         login(true);
         layout.setComponentConstraints(title, "pad 0 " + v + "% 0 " + v + "%");
         layout.setComponentConstraints(description, "pad 0 " + v + "% 0 " + v + "%");
