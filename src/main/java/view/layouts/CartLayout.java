@@ -23,14 +23,14 @@ import view.Image;
 import view.MainFrame;
 import static view.layouts.ListPanel.scale;
 
-public final class CartLayout extends JPanel implements ActionListener {
+public class CartLayout extends JPanel implements ActionListener {
 
     public static final int borderPx = Toolkit.getDefaultToolkit().getScreenSize().width / 500;
 
-    private final JScrollPane scroll;
+    private JScrollPane scroll;
     private Cart mainPanel;
 
-    private final JPanel upPanel;
+    private JPanel upPanel;
     private JButton returnButton;
     private JButton complete;
 
@@ -55,12 +55,14 @@ public final class CartLayout extends JPanel implements ActionListener {
         };
         this.categoryPanel = new JPanel();
 
+//		this.categoryPanel.repaint();
         this.makeMainPanel();
 
         this.upPanel.setLayout(null);
         this.categoryPanel.setLayout(new FlowLayout(View.Y_AXIS));
 
         this.scroll = new JScrollPane(mainPanel);
+//		this.scroll.add(mainPanel);
         this.scroll.setVisible(true);
         this.scroll.getVerticalScrollBar().setUnitIncrement(16);
 
@@ -81,6 +83,10 @@ public final class CartLayout extends JPanel implements ActionListener {
     public void addProduct(Produkt produkt) {
         this.mainPanel.addProdukt(produkt, false);
     }
+
+//    public void removeProduct(Produkt produkt) {
+//        this.mainPanel.removeProdukt(produkt);
+//    }
     public void refreshCategoryPanel() {
         float sumFloat = 0;
         int numOf = 0;
@@ -166,7 +172,7 @@ public final class CartLayout extends JPanel implements ActionListener {
         this.returnButton.addActionListener(this);
 
         this.complete = new JButton(Image.CART.icon);
-        this.complete.setBounds(this.upPanel.getPreferredSize().width - this.upPanel.getPreferredSize().height + CartLayout.borderPx, borderPx,
+        this.complete.setBounds(this.upPanel.getPreferredSize().width - this.upPanel.getPreferredSize().height + this.borderPx, borderPx,
                 this.upPanel.getPreferredSize().height - 2 * ShopLayout.borderPx, this.upPanel.getPreferredSize().height - 2 * ShopLayout.borderPx);
         this.complete.setBackground(Color.black);
         this.complete.addActionListener(this);

@@ -41,11 +41,11 @@ import static view.layouts.ListPanel.scale;
 public class NewProduct extends JPanel implements ActionListener {
 
     public static final int borderPx = Toolkit.getDefaultToolkit().getScreenSize().width / 500;
-    private final JButton returnButton;
-    private final int imageWidth = 100;
-    private final int imageHeight = 100;
+    private JButton returnButton;
+    private int imageWidth = 100;
+    private int imageHeight = 100;
 
-    private final Font font = new Font("Sans Serif", Font.BOLD, (int) (scale * 40));
+    private Font font = new Font("Sans Serif", Font.BOLD, (int) (scale * 40));
 
     public NewProduct() {
         setForeground(Color.WHITE);
@@ -192,20 +192,29 @@ public class NewProduct extends JPanel implements ActionListener {
         descTextArea.setLineWrap(true);
         descTextArea.setWrapStyleWord(true);
         descTextArea.setBackground(Color.BLACK);
+//                descTextArea.setEditable(isAdmin);
         descPanel.add(descTextArea);
 
-        save.addActionListener((ActionEvent e) -> {
-            if (e.getSource() == save) {
-                boolean toAdd = addProductToShop();
-                if (toAdd) {
-                    Kategoria kategoria = (Kategoria) category.getSelectedItem();
-                    Producent prod1 = (Producent) producent.getSelectedItem();
-                    ProduktDao dao = new ProduktDao();
-                    Produkt productToAdd = new Produkt(nameLabel.getText(), Float.parseFloat(price.getText()), descTextArea.getText(), 0, kategoria, prod1, 0, imageLabel.getText());
-                    dao.create(productToAdd);
-                    addProductToShopPopUp();
-                    MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent)e.getSource());
-                    frame.addProduct(productToAdd);
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == save) {
+                    boolean toAdd = addProductToShop();
+                    if (toAdd) {
+                        Kategoria kategoria = (Kategoria) category.getSelectedItem();
+                        Producent prod = (Producent) producent.getSelectedItem();
+                        ProduktDao dao = new ProduktDao();
+                        Produkt productToAdd = new Produkt(nameLabel.getText(), Float.parseFloat(price.getText()),
+                                descTextArea.getText(), 0,
+                                kategoria,
+                                prod,
+                                0, imageLabel.getText());
+                        dao.create(productToAdd);
+                        addProductToShopPopUp();
+                        MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent)e.getSource());
+                        frame.addProduct(productToAdd);
+                    }
+
                 }
             }
         });
@@ -240,8 +249,64 @@ public class NewProduct extends JPanel implements ActionListener {
         return false;
     }
 
+//    private Kategoria addCategory() {
+//        JPanel panel = new JPanel(new GridLayout(2, 2, 1, 1));
+//        JTextField opis = new JTextField("Opis");
+//        JTextField nazwa = new JTextField("Nazwa");
+//        JButton add = new JButton("Dodaj");
+//        JButton cancel = new JButton("Anuluj");
+//        panel.add(nazwa);
+//        panel.add(opis);
+//        panel.add(cancel);
+//        panel.add(add);
+//        Object[] options = {"Tak",
+//            "Anuluj"};
+//        int n = JOptionPane.showOptionDialog(null,
+//                "Dodaj kategorię",
+//                "",
+//                JOptionPane.YES_NO_CANCEL_OPTION,
+//                JOptionPane.QUESTION_MESSAGE,
+//                view.Image.LOGO.icon,
+//                panel;
+//        if (n == 0) {
+//            addProductToShopPopUp();
+////            zrób coś
+//        }
+//        if (n == 1) {
+////            zrób coś
+//        }
+//        return null;
+//    }
+    private Producent addProducent() {
+        Object[] options = {"Tak",
+            "Anuluj"};
+        int n = JOptionPane.showOptionDialog(null,
+                "Czy na pewno chcesz dodać produkt do sklepu?",
+                "",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+        if (n == 0) {
+            addProductToShopPopUp();
+//            zrób coś
+        }
+        if (n == 1) {
+//            zrób coś
+        }
+        return null;
+    }
 
     private void addProductToShopPopUp() {
         JOptionPane.showMessageDialog(null, "Dodano produkt do sklepu", "", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void categoryNeeded() {
+        JOptionPane.showMessageDialog(null, "Podana kategoria nie istnieje!", "", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void producentNeeded() {
+        JOptionPane.showMessageDialog(null, "Podany producent nie istnieje!", "", JOptionPane.WARNING_MESSAGE);
     }
 }

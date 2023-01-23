@@ -4,10 +4,12 @@
  */
 package view.layouts;
 
+import dao.KategoriaDao;
 import dao.ZamowienieDao;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,20 +21,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import map.Kategoria;
 import map.Uzytkownik;
 import map.Zamowienie;
 import view.Image;
 import view.Letter;
 import view.MainFrame;
 import static view.layouts.ListPanel.scale;
+import static view.layouts.ShopLayout.borderPx;
+import static view.layouts.WarehouseLayout.borderPx;
 
 /**
  *
@@ -318,13 +326,25 @@ public class UserLayout extends JPanel implements ActionListener {
             mf.returnToShopFromUser();
         }
         if (e.getSource() == this.showDetails) {
+
             ZamowienieDao dao = new ZamowienieDao();
-            int[] selectedIndices = list.getSelectedIndices();
+//            Zamowienie zamowienie = dao.getZamowienie(());
+//            String str = list.getSelectedIndex();
+              int[] selectedIndices = list.getSelectedIndices();
+//              
             List<Zamowienie> zamowienia = dao.getUserOrders(user);
-           
+            
             Zamowienie zamowienie = zamowienia.get(selectedIndices[0]);
+//            
+//              System.out.println(list.getSelectedIndex());
+//              
+//                System.out.println(zamowienia.size());
+//                
+//            System.out.println(zamowienia.get(selectedIndices[0]));
             MainFrame mf = (MainFrame) SwingUtilities.getWindowAncestor(this);
             mf.showOrderDetails(zamowienie);
+            System.out.println(list.getSelectedIndex());
+            System.out.println(zamowienia.get(list.getSelectedIndex()));
         }
     }
 
