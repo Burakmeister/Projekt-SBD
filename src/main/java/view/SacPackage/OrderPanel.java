@@ -5,36 +5,28 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import view.MainFrame;
 import view.SacPackage.Button;
-import view.PopUps;
 import dao.AdresDao;
+import dao.MagazynDao;
+import dao.ProduktDao;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import map.Adres;
 import dao.SposobRealizacjiDao;
-import dao.UzytkownikDao;
 import dao.ZamowienieDao;
 import java.util.List;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
+import map.Magazyn;
+import map.Produkt;
 import map.SposobRealizacji;
-import map.Uzytkownik;
 import map.Zamowienie;
 
 
@@ -46,8 +38,11 @@ public class OrderPanel extends javax.swing.JPanel {
 
     private ArrayList<Adres> adresy;    // tutaj zapisywane będą adresy brane z bazy i z tabeli utworzony jest JList
     private List<SposobRealizacji> sposobyRealizacji;     // a tutaj sposoby realizacji
+    private List<Produkt> produkty;
+    private float sumaZamowienie;
     
-    public OrderPanel() {
+    public OrderPanel(List<Produkt> produkty) {
+        this.produkty = produkty;
         initComponents();
         init();
     }
@@ -154,13 +149,6 @@ public class OrderPanel extends javax.swing.JPanel {
         realizacjaList.setBounds(150, 600, 400, size.height);
         this.add(realizacjaList);
         
-        realizacjaList.addListSelectionListener(new ListSelectionListener() {     // wybrany sposob przypisz do zamówienia
-            @Override
-            public void valueChanged(ListSelectionEvent e) {    // kiedy użytkownik wybierze coś z listy 
-                
-            }
-        });
-        
         JLabel infoLabel = new JLabel("Uwagi do zamówienia:");   // użytkownik może wpisać swoje uwagi w textfield, informacje z niego są przypisywane do zamówienia
         infoLabel.setFont(new Font("sansserif", 1, 36));
         infoLabel.setForeground(Color.WHITE);
@@ -173,12 +161,26 @@ public class OrderPanel extends javax.swing.JPanel {
         uwagiField.setBackground(Color.WHITE);
         uwagiField.setBounds(150, 800, 990, 45);
         this.add(uwagiField);
+        
+        // Obliczenie całkowitego kosztu zamówienia
+        int i = 0;
+        for (Produkt p : produkty) {
+            sumaZamowienie += p.getCena();
+            i++;
+        }
+        
+        JLabel cenaLabel = new JLabel("Całkowity koszt zamówienia: " + Math.round(100*sumaZamowienie)/100.0 + " zł");
+        cenaLabel.setFont(new Font("sansserif", 1, 36));
+        cenaLabel.setForeground(Color.WHITE);
+        size = cenaLabel.getPreferredSize();
+        cenaLabel.setBounds(150, 890, size.width, size.height);
+        this.add(cenaLabel);
 
         Button orderButton = new Button();
         orderButton.setBackground(new Color(196, 53, 53));
         orderButton.setForeground(new Color(250, 250, 250));
         orderButton.setText("Złóż zamówienie");
-        orderButton.setBounds(150, 890, 180, 35);
+        orderButton.setBounds(150, 980, 180, 35);
         this.add(orderButton, "w 40%, h 40");
         
         orderButton.addActionListener(new ActionListener() {
@@ -222,18 +224,46 @@ public class OrderPanel extends javax.swing.JPanel {
                     AdresDao adresDao = new AdresDao();
                     SposobRealizacjiDao sposobRealizacjiDao = new SposobRealizacjiDao();
                     ZamowienieDao zamowienieDao = new ZamowienieDao();
+                    Zamowienie zamowienie;
                     
                     if(adresList.getSelectedIndex() == 0) {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie.setProdukt(produkty);    // nowe
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                     else {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie.setProdukt(produkty);
                         zamowienieDao.addZamowienie(zamowienie);
+                    }
+                    
+                    MagazynDao mDao = new MagazynDao();
+                    ProduktDao pDao = new ProduktDao();
+                    
+                    ArrayList<Magazyn> warehouses = mDao.getAll();
+                    
+                    int i;
+                    for(Produkt p: zamowienie.getProdukt()){
+                        for(Magazyn m: warehouses){
+                            i=0;
+                            while(!m.getProdukt().get(i).equals(p)){
+                                i++;
+                            }
+                            if(m.getProdukt().get(i).equals(p)){
+                                List<Produkt> prs = m.getProdukt();
+                                p.setLiczbaSztuk(p.getLiczbaSztuk()-1);
+                                pDao.update(p);
+                                prs.remove(p);
+                                m.setProdukt(prs);
+                                mDao.update(m);
+                            }
+                        }
                     }
                                 
                     JOptionPane.showMessageDialog(null, "Dodano zamówienie do listy zamówień.", "", JOptionPane.INFORMATION_MESSAGE);
                     MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+                    frame.updateOrders();
+                    frame.updateAvailability();
                     frame.returnToShop();
                 } 
             }
@@ -243,7 +273,7 @@ public class OrderPanel extends javax.swing.JPanel {
         backButton.setBackground(new Color(196, 53, 53));
         backButton.setForeground(new Color(250, 250, 250));
         backButton.setText("Wróć do koszyka");
-        backButton.setBounds(380, 890, 200, 35);
+        backButton.setBounds(380, 980, 200, 35);
         this.add(backButton);
         
         backButton.addActionListener(new ActionListener() {     // po naciśnięciu powrót do koszyka

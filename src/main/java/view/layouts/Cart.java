@@ -30,7 +30,7 @@ import view.Image;
 import view.MainFrame;
 
 public class Cart extends JPanel {
-    
+
     private int imageWidth = 400;
     private int imageHeight = 300;
     public final Dimension defaultResolution = new Dimension(2560, 1440);
@@ -38,16 +38,16 @@ public class Cart extends JPanel {
     private int option; //0-warehouse  1-shop  2-orderDetails
 
     public float scale = 1;
-    
+
     private Font font;
-    
+
     private List<JButton> removeButtons = new ArrayList<JButton>();
     private List<JButton> toDetailsButton = new ArrayList<JButton>();
     private List<JTextArea> shortTextLabel = new ArrayList<JTextArea>();
     private List<JSpinner> spiners = new ArrayList<>();
-    
+
     private List<Produkt> list = new ArrayList<Produkt>();
-    
+
     public Cart(Dimension dim, int cardinality, int option) {
         this.option = option;
 //		this.setSize(new Dimension(dim.width, dim.height*10));
@@ -81,14 +81,14 @@ public class Cart extends JPanel {
         this.setPreferredSize(new Dimension(dim.width - CartLayout.borderPx * 10, cardinality * imageHeight));
         font = new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 40));
     }
-    
+
     public void addProdukt(Produkt produkt, boolean isRepaint) {
         if (!isRepaint) {
             MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
             if (option == 1) {
                 frame.refreshCategoryPanel(false);
             }
-            
+
             for (int i = 0; i < this.list.size(); i++) {
                 if (this.list.get(i).getIdProduktu() == produkt.getIdProduktu()) {
                     int integ = (Integer) this.spiners.get(i).getValue();
@@ -102,14 +102,14 @@ public class Cart extends JPanel {
         JButton toDetails;
         JTextArea shortText;
         JSpinner spinner;
-        
+
         SpinnerModel model = null;
         if (this.option == 0 || this.option == 2) {
             model = new SpinnerNumberModel(1, 1, 100000, 1);
         } else {
             model = new SpinnerNumberModel(1, 1, produkt.getLiczbaSztuk(), 1);
         }
-        
+
         spinner = new JSpinner(model);
         spinner.addChangeListener((ChangeEvent e) -> {
             MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
@@ -121,14 +121,14 @@ public class Cart extends JPanel {
         removeButton = new JButton(Image.RETURN.icon);
         toDetails = new JButton(Image.DETAILS.icon);
         shortText = new JTextArea(produkt.getNazwaProduktu());
-        
+
         shortText.setFont(font);
         shortText.setLineWrap(true);
         shortText.setWrapStyleWord(true);
         shortText.setEditable(false);
 //		shortText.setIgnoreRepaint(true);
         int tmp = this.list.size();
-        
+
         switch (tmp % 3) {
             case 0:
                 shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx,
@@ -185,15 +185,19 @@ public class Cart extends JPanel {
                         imageHeight / 2);
                 break;
         }
-        
+
         if (option == 2) {
             spinner.setEnabled(false);
             toDetails.setSize(new Dimension(4 * imageWidth / 3,
                     imageHeight / 2));
         }
-        
+
         removeButton.addActionListener((ActionEvent e) -> {
             if (e.getSource() == removeButton) {
+                if (option == 1) {
+                    MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
+                    frame.updateAvailability();
+                }
                 removeProdukt(tmp);
             }
         });
@@ -205,12 +209,12 @@ public class Cart extends JPanel {
         shortText.setBackground(Color.BLACK);
         toDetails.setBackground(Color.black);
         removeButton.setBackground(Color.black);
-        
+
         this.removeButtons.add(removeButton);
         this.toDetailsButton.add(toDetails);
         this.spiners.add(spinner);
         this.shortTextLabel.add(shortText);
-        
+
         this.add(shortText);
         if (this.option != 2) {
             this.add(removeButton);
@@ -231,7 +235,7 @@ public class Cart extends JPanel {
         int max = this.list.size() - 1;
         this.remove(this.removeButtons.get(max));
         this.removeButtons.remove(max);
-        
+
         this.remove(this.toDetailsButton.get(max));
         this.toDetailsButton.remove(max);
         this.remove(this.shortTextLabel.get(max));
@@ -250,13 +254,13 @@ public class Cart extends JPanel {
             frame.refreshCategoryPanel(false);
         }
     }
-    
+
     public void removeAll() {
         while (!this.list.isEmpty()) {
             this.removeProdukt(0);
         }
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -265,7 +269,7 @@ public class Cart extends JPanel {
         this.paintProducts(g2d);
         g2d.scale(1 / scale, 1 / scale);
     }
-    
+
     private void paintProducts(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         g2d.setFont(font);
@@ -283,7 +287,7 @@ public class Cart extends JPanel {
                     if (!g2d.drawImage(new ImageIcon("src/main/products/" + this.list.get(i).getNazwaObrazka()).getImage(), posX, posY, null)) {
                         g2d.drawImage(Image.EMPTY.icon.getImage(), posX, posY, null);
                     }
-                    
+
                     break;
                 }
                 case 2: {
@@ -291,18 +295,18 @@ public class Cart extends JPanel {
                     if (!g2d.drawImage(new ImageIcon("src/main/products/" + this.list.get(i).getNazwaObrazka()).getImage(), posX, posY, null)) {
                         g2d.drawImage(Image.EMPTY.icon.getImage(), posX, posY, null);
                     }
-                    
+
                     break;
                 }
             }
         }
-        
+
     }
-    
+
     public List<Produkt> getProducts() {
         return this.list;
     }
-    
+
     public List<Integer> getNumOfProducts() {
         List<Integer> ret = new ArrayList<>();
         for (int i = 0; i < this.list.size(); i++) {

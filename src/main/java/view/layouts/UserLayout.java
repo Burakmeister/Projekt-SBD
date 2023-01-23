@@ -157,6 +157,10 @@ public class UserLayout extends JPanel implements ActionListener {
         }
         this.categoryPanel.setBackground(Color.black);
     }
+    
+    public void updateOrders() {
+        makeCategoryPanel();
+    }
 
     private void makeMainPanel() {
 //        this.mainPanel = new ListPanel(new Dimension(getPreferredSize().width - 3 * borderPx - this.getPreferredSize().width / 10,

@@ -195,10 +195,11 @@ public class CartLayout extends JPanel implements ActionListener {
         if (e.getSource() == this.returnButton) {
             MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
             mf.returnToShopFromCart();
+            
         }
         if (e.getSource() == this.complete) {
             MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-            mf.showCompleteOrder();
+            mf.showCompleteOrder(mf.getProductsFromCart());
         }
     }
 }
