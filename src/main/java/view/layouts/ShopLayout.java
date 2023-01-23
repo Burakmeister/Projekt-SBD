@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -39,15 +38,15 @@ public class ShopLayout extends JPanel implements ActionListener {
 
     public static final int borderPx = Toolkit.getDefaultToolkit().getScreenSize().width / 500;
 
-    private JScrollPane scroll;
+    private final JScrollPane scroll;
     private ListPanel mainPanel;
 
-    private JPanel upPanel;
+    private final JPanel upPanel;
     private JButton logOut;
     private JButton cart;
     private JButton user;
 
-    private JPanel categoryPanel;
+    private final JPanel categoryPanel;
     private JButton addCategory;
     private JList<String> list;
 

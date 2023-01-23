@@ -1,9 +1,5 @@
 package view.layouts;
 
-import dao.AdresDao;
-import dao.MagazynDao;
-import dao.ProduktDao;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,21 +9,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.text.View;
 import map.Adres;
-import map.Magazyn;
 import map.Produkt;
 import map.Zamowienie;
 import view.Image;
@@ -45,23 +35,18 @@ public class OrderDetails extends JPanel implements ActionListener {
 
     private JPanel upPanel;
     private JButton returnButton;
-    private JButton saveButton;
 
-    private JButton addMagazin;
-    private JLabel logo;
     private JTextField cityField;
     private JTextField zipCodeField;
     private JTextField streetField;
     private JTextField buildNumField;
     private JTextField apartNumField;
-    private JTextField capacityField;
-
     private JPanel categoryPanel = new JPanel();
     private JLabel quantity;
     private JLabel sum;
     private JLabel mass;
 
-    private Zamowienie order;
+    private final Zamowienie order;
 
     public OrderDetails(Zamowienie order) {
         this.order = order;
@@ -71,17 +56,14 @@ public class OrderDetails extends JPanel implements ActionListener {
         this.setBackground(Color.WHITE);
 
         this.upPanel = new JPanel();
-//        };
         this.categoryPanel = new JPanel();
 
-//		this.categoryPanel.repaint();
         this.makeMainPanel();
 
         this.upPanel.setLayout(null);
         this.categoryPanel.setLayout(new FlowLayout(View.VERTICAL));
 
         this.scroll = new JScrollPane(mainPanel);
-//		this.scroll.add(mainPanel);
         this.scroll.setVisible(true);
         this.scroll.getVerticalScrollBar().setUnitIncrement(16);
 
@@ -159,7 +141,6 @@ public class OrderDetails extends JPanel implements ActionListener {
         tmp3.setFont(font);
         tmp3.setForeground(Color.white);
 
-        this.categoryPanel.add(addMagazin);
         this.categoryPanel.add(tmp1);
         this.categoryPanel.add(sum);
         this.categoryPanel.add(tmp2);
@@ -173,6 +154,9 @@ public class OrderDetails extends JPanel implements ActionListener {
     private void makeMainPanel() {
         this.mainPanel = new Cart(new Dimension(getPreferredSize().width - 3 * borderPx - this.getPreferredSize().width / 10,
                 this.getPreferredSize().height - this.getPreferredSize().height / 8 - 8 * borderPx), 20, 2);
+        for (Produkt p : this.order.getProdukt()) {
+            this.addProduct(p);
+        }
         this.mainPanel.setLayout(null);
         this.mainPanel.setBackground(new Color(188, 69, 69));
 
@@ -182,7 +166,7 @@ public class OrderDetails extends JPanel implements ActionListener {
 
     private void makeUpPanel() {
         Adres adres = this.order.getAdres();
-        
+
         this.returnButton = new JButton(Image.RETURN.icon);
         this.returnButton.setBackground(Color.black);
         this.returnButton.setBounds(borderPx,
@@ -202,6 +186,7 @@ public class OrderDetails extends JPanel implements ActionListener {
         cityField = new JTextField();
         cityField.setFont(font);
         cityField.setText(adres.getMiasto());
+        cityField.setEditable(false);
 
         JLabel zipCode = new JLabel("Kod pocztowy:");
         zipCode.setFont(font);
@@ -209,6 +194,7 @@ public class OrderDetails extends JPanel implements ActionListener {
         zipCodeField = new JTextField();
         zipCodeField.setFont(font);
         zipCodeField.setText(String.valueOf(adres.getKodPocztowy()));
+        zipCodeField.setEditable(false);
 
         JLabel street = new JLabel("Ulica:");
         street.setFont(font);
@@ -216,6 +202,7 @@ public class OrderDetails extends JPanel implements ActionListener {
         streetField = new JTextField();
         streetField.setFont(font);
         streetField.setText(adres.getUlica());
+        streetField.setEditable(false);
 
         JLabel buildNum = new JLabel("Nr budynku:");
         buildNum.setFont(font);
@@ -223,13 +210,14 @@ public class OrderDetails extends JPanel implements ActionListener {
         buildNumField = new JTextField();
         buildNumField.setFont(font);
         buildNumField.setText(adres.getNrBudynku());
+        buildNumField.setEditable(false);
 
         JLabel apartNum = new JLabel("Nr lokalu:");
         apartNum.setFont(font);
         apartNum.setForeground(Color.WHITE);
         apartNumField = new JTextField();
         apartNumField.setFont(font);
-
+        apartNumField.setEditable(false);
 
         address.add(city);
         address.add(zipCode);
@@ -251,7 +239,6 @@ public class OrderDetails extends JPanel implements ActionListener {
 
         this.upPanel.setBackground(Color.BLACK);
         this.upPanel.add(this.returnButton);
-        this.upPanel.add(this.saveButton);
     }
 
     @Override

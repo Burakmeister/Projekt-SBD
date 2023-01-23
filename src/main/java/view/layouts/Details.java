@@ -36,10 +36,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import map.Kategoria;
 import map.Magazyn;
 import map.Producent;
@@ -59,7 +56,6 @@ public class Details extends JPanel implements ActionListener {
     private boolean fromCart;
     private Produkt produkt;
     private JList<String> list;
-    private JScrollPane scrollPane;
 
     private Font font = new Font("Sans Serif", Font.BOLD, (int) (scale * 40));
 
@@ -115,7 +111,6 @@ public class Details extends JPanel implements ActionListener {
         nameLabel.setBackground(Color.black);
         nameLabel.setLineWrap(true);
         nameLabel.setWrapStyleWord(true);
-//        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nameLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         nameLabel.setEditable(admin);
         panel.add(nameLabel);
@@ -376,76 +371,66 @@ public class Details extends JPanel implements ActionListener {
             imageText.setText(produkt.getNazwaObrazka());
             imageText.setFont(font);
             imagePanel.add(imageText);
-            save.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (e.getSource() == save) {
-                        Kategoria kategoria = produkt.getKategoria();
-                        Producent prod = produkt.getProducent();
-                        for (Kategoria k : kDao.getAll()) {
-                            if (k.getNazwaKategorii().equals(category.getSelectedItem())) {
-                                kategoria = k;
-                                break;
-                            }
+            save.addActionListener((ActionEvent e) -> {
+                if (e.getSource() == save) {
+                    Kategoria kategoria = produkt.getKategoria();
+                    Producent prod1 = produkt.getProducent();
+                    for (Kategoria k : kDao.getAll()) {
+                        if (k.getNazwaKategorii().equals(category.getSelectedItem())) {
+                            kategoria = k;
+                            break;
                         }
-                        for (Producent p : pDao.getAll()) {
-                            if (p.getNazwaProducenta().equals(producent.getSelectedItem())) {
-                                prod = p;
-                                break;
-                            }
-                        }
-
-                        // magazyny
-                        int[] selectedIndices = list.getSelectedIndices();
-                        MagazynDao daoM = new MagazynDao();
-                        List<Magazyn> magazyny = daoM.getAll();
-                        List<Magazyn> magazyny_produktu = new ArrayList<>();
-                        int howMany = 0;
-                        for (int i = 0; i < selectedIndices.length; i++) {
-                            System.out.println(list.getModel().getElementAt(selectedIndices[i]));
-                            magazyny_produktu.add(magazyny.get(selectedIndices[i]));
-                            howMany++;
-                        }
-
-                        ProduktDao dao = new ProduktDao();
-
-                        produkt.setCena(Float.parseFloat(price.getText()));
-                        produkt.setKategoria(kategoria);
-                        produkt.setNazwaObrazka(imageText.getText());
-                        produkt.setNazwaProduktu(nameLabel.getText());
-                        produkt.setOpis(descTextArea.getText());
-                        produkt.setProducent(prod);
-                        produkt.setMasa(Float.parseFloat(mass.getText()));
-
-                        List<Magazyn> magTemp = produkt.getMagazyn();
-                        ArrayList<Magazyn> newMags = new ArrayList<>();
-                        boolean isExist;
-                        for (Magazyn magazyn : magazyny_produktu) {
-                            isExist = false;
-                            for (Magazyn mCur : magTemp) {
-                                if (magazyn.equals(mCur)) {
-                                    newMags.add(magazyn);
-                                    isExist = true;
-                                }
-                            }
-                            if (!isExist) {
-                                newMags.add(magazyn);
-                            }
-                        }
-
-                        produkt.setMagazyn(newMags);
-                        produkt.setLiczbaSztuk(produkt.getMagazyn().size());
-
-                        MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(returnButton);
-                        dao.update(produkt);
-                        produktPopPup();
-                        mf.refreshShop(produkt);
-                        mf.updateAvailability();
-                        mf.refreshWarehouse();
                     }
+                    for (Producent p : pDao.getAll()) {
+                        if (p.getNazwaProducenta().equals(producent.getSelectedItem())) {
+                            prod1 = p;
+                            break;
+                        }
+                    }
+                    // magazyny
+                    int[] selectedIndices = list.getSelectedIndices();
+                    MagazynDao daoM = new MagazynDao();
+                    List<Magazyn> magazyny = daoM.getAll();
+                    List<Magazyn> magazyny_produktu = new ArrayList<>();
+                    int howMany = 0;
+                    for (int i = 0; i < selectedIndices.length; i++) {
+                        System.out.println(list.getModel().getElementAt(selectedIndices[i]));
+                        magazyny_produktu.add(magazyny.get(selectedIndices[i]));
+                        howMany++;
+                    }
+                    ProduktDao dao = new ProduktDao();
+                    produkt.setCena(Float.parseFloat(price.getText()));
+                    produkt.setKategoria(kategoria);
+                    produkt.setNazwaObrazka(imageText.getText());
+                    produkt.setNazwaProduktu(nameLabel.getText());
+                    produkt.setOpis(descTextArea.getText());
+                    produkt.setProducent(prod1);
+                    produkt.setMasa(Float.parseFloat(mass.getText()));
+                    List<Magazyn> magTemp = produkt.getMagazyn();
+                    ArrayList<Magazyn> newMags = new ArrayList<>();
+                    boolean isExist;
+                    for (Magazyn magazyn : magazyny_produktu) {
+                        isExist = false;
+                        for (Magazyn mCur : magTemp) {
+                            if (magazyn.equals(mCur)) {
+                                newMags.add(magazyn);
+                                isExist = true;
+                            }
+                        }
+                        if (!isExist) {
+                            newMags.add(magazyn);
+                        }
+                    }
+                    produkt.setMagazyn(newMags);
+                    produkt.setLiczbaSztuk(produkt.getMagazyn().size());
+                    MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(returnButton);
+                    dao.update(produkt);
+                    produktPopPup();
+                    mf.refreshShop(produkt);
+                    mf.updateAvailability();
+                    mf.refreshWarehouse();
                 }
-            }
-            );
+            });
         }
     }
 
