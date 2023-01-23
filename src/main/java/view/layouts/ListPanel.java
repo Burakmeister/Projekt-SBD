@@ -279,7 +279,7 @@ public class ListPanel extends JPanel implements ActionListener {
         ArrayList<Produkt> products = dao.getAll();
         for (Produkt produkt : products) {
             for (String cat : katList) {
-                if (produkt.getKategoria().getNazwaKategorii().equals(cat)) {
+                if (produkt.getKategoria().getNazwaKategorii().equals(cat) && produkt.getLiczbaSztuk()>0) {
                     this.addProdukt(produkt);
                 }
             }

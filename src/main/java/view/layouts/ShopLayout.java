@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -39,15 +38,15 @@ public class ShopLayout extends JPanel implements ActionListener {
 
     public static final int borderPx = Toolkit.getDefaultToolkit().getScreenSize().width / 500;
 
-    private JScrollPane scroll;
+    private final JScrollPane scroll;
     private ListPanel mainPanel;
 
-    private JPanel upPanel;
+    private final JPanel upPanel;
     private JButton logOut;
     private JButton cart;
     private JButton user;
 
-    private JPanel categoryPanel;
+    private final JPanel categoryPanel;
     private JButton addCategory;
     private JList<String> list;
 
@@ -228,12 +227,10 @@ public class ShopLayout extends JPanel implements ActionListener {
         }
         if (e.getSource() == this.cart) {
             if (!admin) {
-                System.out.println("Przechodzisz do koszyka");
                 MainFrame mf = (MainFrame) SwingUtilities.getWindowAncestor(this);
                 mf.showCart();
                 mf.refreshCategoryPanel(false);
             } else {
-                System.out.println("Przechodzisz do magazyn"+Letter.UU.getLetter()+"w");
                 MainFrame mf = (MainFrame) SwingUtilities.getWindowAncestor(this);
                 mf.showWarehouse();
                 mf.refreshCategoryPanel(true);
@@ -248,12 +245,10 @@ public class ShopLayout extends JPanel implements ActionListener {
             addedCategoryPopUp();
         }
         if (e.getSource() == this.addCategory && admin == false){
-
             mainPanel.clearProductsPanel();
             int[] selectedIndices = list.getSelectedIndices();
             ArrayList<String> categories = new ArrayList<>();
             for (int i = 0; i < selectedIndices.length; i++) {
-                System.out.println(list.getModel().getElementAt(selectedIndices[i]));
                 categories.add(list.getModel().getElementAt(selectedIndices[i]));
             }
             mainPanel.setList(categories);
