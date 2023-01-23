@@ -32,13 +32,12 @@ public class CartLayout extends JPanel implements ActionListener {
 
     private JPanel upPanel;
     private JButton returnButton;
-    private JLabel logo;
     private JButton complete;
 
     private JPanel categoryPanel = new JPanel();
-    JLabel quantity;
-    JLabel sum;
-    JLabel mass;
+    private JLabel quantity;
+    private JLabel sum;
+    private JLabel mass;
 
     public CartLayout() {
         this.setLayout(null);
@@ -158,7 +157,7 @@ public class CartLayout extends JPanel implements ActionListener {
 
     private void makeMainPanel() {
         this.mainPanel = new Cart(new Dimension(getPreferredSize().width - 3 * borderPx - this.getPreferredSize().width / 10,
-                this.getPreferredSize().height - this.getPreferredSize().height / 8 - 8 * borderPx), 20, false);
+                this.getPreferredSize().height - this.getPreferredSize().height / 8 - 8 * borderPx), 20, 1);
         this.mainPanel.setLayout(null);
         this.mainPanel.setBackground(new Color(188, 69, 69));
 

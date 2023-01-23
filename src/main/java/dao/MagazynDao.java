@@ -2,7 +2,6 @@
 package dao;
 
 import java.util.ArrayList;
-import java.util.List;
 import map.Adres;
 import map.Magazyn;
 import org.hibernate.Session;

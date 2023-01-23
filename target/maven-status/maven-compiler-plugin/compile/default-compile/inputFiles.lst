@@ -1,4 +1,5 @@
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\PanelCover.java
+C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\Letter.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\ListPanel.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\ButtonOutLine.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\AdresDao.java
@@ -13,6 +14,7 @@ C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\map\Zamowieni
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\SposobRealizacjiDao.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\ProduktDao.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\OrderPanel.java
+C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\OrderDetails.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\map\Producent.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\map\Produkt.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\MyPasswordField.java
@@ -24,7 +26,6 @@ C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\CartLayout.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\map\Adres.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\MainFrame.java
-C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\UzytForm.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\ZamowienieDao.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\Cart.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\MagazynDao.java
@@ -33,4 +34,5 @@ C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\map\Kategoria.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\MyTextField.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\dao\KategoriaDao.java
+C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\layouts\UserLayout.java
 C:\Users\BURAK\Documents\programowanie 5\Projekt-SBD\src\main\java\view\SacPackage\PanelLoginAndRegister.java

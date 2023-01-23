@@ -35,7 +35,7 @@ public class Cart extends JPanel {
     private int imageHeight = 300;
     public final Dimension defaultResolution = new Dimension(2560, 1440);
     private Dimension curResolution;
-    private boolean warehouseCart;
+    private int option; //0-warehouse  1-shop  2-orderDetails
 
     public float scale = 1;
 
@@ -48,8 +48,8 @@ public class Cart extends JPanel {
 
     private List<Produkt> list = new ArrayList<Produkt>();
 
-    public Cart(Dimension dim, int cardinality, boolean warehouseCart) {
-        this.warehouseCart = warehouseCart;
+    public Cart(Dimension dim, int cardinality, int option) {
+        this.option = option;
 //		this.setSize(new Dimension(dim.width, dim.height*10));
         System.out.println(dim.width + "  " + dim.height);
         this.curResolution = Toolkit.getDefaultToolkit().getScreenSize();
@@ -81,10 +81,11 @@ public class Cart extends JPanel {
         this.setPreferredSize(new Dimension(dim.width - CartLayout.borderPx * 10, cardinality * imageHeight));
         font = new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 40));
     }
+
     public void addProdukt(Produkt produkt, boolean isRepaint) {
         if (!isRepaint) {
             MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-            if (!this.warehouseCart) {
+            if (option==1) {
                 frame.refreshCategoryPanel(false);
             }
 
@@ -103,7 +104,7 @@ public class Cart extends JPanel {
         JSpinner spinner;
 
         SpinnerModel model = null;
-        if (this.warehouseCart) {
+        if (this.option==0) {
             model = new SpinnerNumberModel(1, 1, 100000, 1);
         } else {
             model = new SpinnerNumberModel(1, 1, produkt.getLiczbaSztuk(), 1);
@@ -112,7 +113,7 @@ public class Cart extends JPanel {
         spinner = new JSpinner(model);
         spinner.addChangeListener((ChangeEvent e) -> {
             MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobÄ…dĹş rodzica (czyli JFrame)
-            if (!warehouseCart) {
+            if (this.option==1) {
                 frame.refreshCategoryPanel(false);
             }
         });
@@ -130,69 +131,65 @@ public class Cart extends JPanel {
 
         switch (tmp % 3) {
             case 0:
-                shortText.setBounds(imageWidth + 2 * ShopLayout.borderPx,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx,
+                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
                         imageWidth * 2,
                         imageHeight / 2);
-                toDetails.setBounds(imageWidth + 2 * ShopLayout.borderPx,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                removeButton.setBounds(imageWidth + 2 * ShopLayout.borderPx + 2 * imageWidth / 3,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                removeButton.setBounds(imageWidth + 10 * ShopLayout.borderPx + 2 * imageWidth / 3,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                spinner.setBounds(imageWidth + 2 * ShopLayout.borderPx + 4 * imageWidth / 3,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
                 break;
             case 1:
-                shortText.setBounds(imageWidth + 2 * ShopLayout.borderPx + 4 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx,
+                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
                         imageWidth * 2,
                         imageHeight / 2);
-                toDetails.setBounds(imageWidth + 2 * ShopLayout.borderPx + 4 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                removeButton.setBounds(imageWidth + 2 * ShopLayout.borderPx + 2 * imageWidth / 3 + 4 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                removeButton.setBounds(imageWidth + 10 * ShopLayout.borderPx + 2 * imageWidth / 3 + 4 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                spinner.setBounds(imageWidth + 2 * ShopLayout.borderPx + 4 * imageWidth / 3 + 4 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3 + 4 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
                 break;
             default:
-                shortText.setBounds(imageWidth + 2 * ShopLayout.borderPx + 8 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx,
+                shortText.setBounds(imageWidth + 10 * ShopLayout.borderPx + 8 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx,
                         imageWidth * 2,
                         imageHeight / 2);
-                toDetails.setBounds(imageWidth + 2 * ShopLayout.borderPx + 8 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                toDetails.setBounds(imageWidth + 10 * ShopLayout.borderPx + 8 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                removeButton.setBounds(imageWidth + 2 * ShopLayout.borderPx + 2 * imageWidth / 3 + 8 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                removeButton.setBounds(imageWidth + 10 * ShopLayout.borderPx + 2 * imageWidth / 3 + 8 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
-                spinner.setBounds(imageWidth + 2 * ShopLayout.borderPx + 4 * imageWidth / 3 + 8 * imageWidth,
-                        (tmp / 3) * 4 * imageHeight / 3 + ShopLayout.borderPx + imageHeight / 2,
+                spinner.setBounds(imageWidth + 10 * ShopLayout.borderPx + 4 * imageWidth / 3 + 8 * imageWidth,
+                        (tmp / 3) * 4 * imageHeight / 3 + 5 * ShopLayout.borderPx + imageHeight / 2,
                         2 * imageWidth / 3,
                         imageHeight / 2);
                 break;
         }
 
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == removeButton) {
-                    removeProdukt(tmp);
-                }
+        removeButton.addActionListener((ActionEvent e) -> {
+            if (e.getSource() == removeButton) {
+                removeProdukt(tmp);
             }
-
         });
         toDetails.addActionListener(new ActionListener() {
             @Override
@@ -221,7 +218,7 @@ public class Cart extends JPanel {
         }
         this.repaint();
         MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-        if (!this.warehouseCart) {
+        if (this.option==1) {
             frame.refreshCategoryPanel(false);
         }
     }
@@ -243,7 +240,7 @@ public class Cart extends JPanel {
         this.list.remove(index);
         this.repaint();
         MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-        if (this.warehouseCart) {
+        if (this.option==0) {
             frame.refreshCategoryPanel(true);
         } else {
             frame.refreshCategoryPanel(false);
@@ -270,14 +267,14 @@ public class Cart extends JPanel {
         for (int i = 0; i < this.list.size(); i++) {
             switch (i % 3) {
                 case 0: {
-                    int posX = ShopLayout.borderPx, posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + ShopLayout.borderPx);
+                    int posX = 19 * ShopLayout.borderPx, posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + 10 * ShopLayout.borderPx);
                     if (!g2d.drawImage(new ImageIcon("src/main/products/" + this.list.get(i).getNazwaObrazka()).getImage(), posX, posY, null)) {
                         g2d.drawImage(Image.EMPTY.icon.getImage(), posX, posY, null);
                     }
                     break;
                 }
                 case 1: {
-                    int posX = (int) (ShopLayout.borderPx + 4 * imageWidth / scale), posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + ShopLayout.borderPx);
+                    int posX = (int) (19 * ShopLayout.borderPx + 4 * imageWidth / scale), posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + 10 * ShopLayout.borderPx);
                     if (!g2d.drawImage(new ImageIcon("src/main/products/" + this.list.get(i).getNazwaObrazka()).getImage(), posX, posY, null)) {
                         g2d.drawImage(Image.EMPTY.icon.getImage(), posX, posY, null);
                     }
@@ -285,7 +282,7 @@ public class Cart extends JPanel {
                     break;
                 }
                 case 2: {
-                    int posX = (int) (ShopLayout.borderPx + 8 * imageWidth / scale), posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + ShopLayout.borderPx);
+                    int posX = (int) (19 * ShopLayout.borderPx + 8 * imageWidth / scale), posY = (int) (i / 3 * 1 / scale * 4 * imageHeight / 3 + 10 * ShopLayout.borderPx);
                     if (!g2d.drawImage(new ImageIcon("src/main/products/" + this.list.get(i).getNazwaObrazka()).getImage(), posX, posY, null)) {
                         g2d.drawImage(Image.EMPTY.icon.getImage(), posX, posY, null);
                     }
