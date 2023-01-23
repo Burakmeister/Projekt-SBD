@@ -58,7 +58,7 @@ public class OrderPanel extends javax.swing.JPanel {
         this.setBackground(Color.BLACK);
         
         JLabel adLabel = new JLabel("Dodaj adres lub wybierz z listy:");
-        adLabel.setFont(new Font("sansserif", 1, 36));
+        adLabel.setFont(new Font("sansserif", 1, 25));
         adLabel.setForeground(Color.WHITE);
         Dimension size = adLabel.getPreferredSize();
         adLabel.setBounds(150, 100, size.width, size.height);
@@ -120,7 +120,7 @@ public class OrderPanel extends javax.swing.JPanel {
         });
         
         JLabel delivLabel = new JLabel("Wybierz sposób realizacji:");   // wybranie sposobu realizacji zmienić na listę - która pobiera dane z tabeli sposobrealizacji (string sposReal, koszt, int czasWysylki, boolean wniesienie)
-        delivLabel.setFont(new Font("sansserif", 1, 36));
+        delivLabel.setFont(new Font("sansserif", 1, 25));
         delivLabel.setForeground(Color.WHITE);
         size = delivLabel.getPreferredSize();
         delivLabel.setBounds(150, 510, size.width, size.height);
@@ -150,7 +150,7 @@ public class OrderPanel extends javax.swing.JPanel {
         this.add(realizacjaList);
         
         JLabel infoLabel = new JLabel("Uwagi do zamówienia:");   // użytkownik może wpisać swoje uwagi w textfield, informacje z niego są przypisywane do zamówienia
-        infoLabel.setFont(new Font("sansserif", 1, 36));
+        infoLabel.setFont(new Font("sansserif", 1, 25));
         infoLabel.setForeground(Color.WHITE);
         size = infoLabel.getPreferredSize();
         infoLabel.setBounds(150, 710, size.width, size.height);
@@ -170,7 +170,7 @@ public class OrderPanel extends javax.swing.JPanel {
         }
         
         JLabel cenaLabel = new JLabel("Całkowity koszt zamówienia: " + Math.round(100*sumaZamowienie)/100.0 + " zł");
-        cenaLabel.setFont(new Font("sansserif", 1, 36));
+        cenaLabel.setFont(new Font("sansserif", 1, 25));
         cenaLabel.setForeground(Color.WHITE);
         size = cenaLabel.getPreferredSize();
         cenaLabel.setBounds(150, 890, size.width, size.height);
@@ -180,7 +180,7 @@ public class OrderPanel extends javax.swing.JPanel {
         orderButton.setBackground(new Color(196, 53, 53));
         orderButton.setForeground(new Color(250, 250, 250));
         orderButton.setText("Złóż zamówienie");
-        orderButton.setBounds(150, 980, 180, 35);
+        orderButton.setBounds(150+500, 980/2, 180, 35);
         this.add(orderButton, "w 40%, h 40");
         
         orderButton.addActionListener(new ActionListener() {
@@ -237,33 +237,33 @@ public class OrderPanel extends javax.swing.JPanel {
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                     
-                    MagazynDao mDao = new MagazynDao();
-                    ProduktDao pDao = new ProduktDao();
+//                    MagazynDao mDao = new MagazynDao();
+//                    ProduktDao pDao = new ProduktDao();
+//                    
+//                    ArrayList<Magazyn> warehouses = mDao.getAll();
                     
-                    ArrayList<Magazyn> warehouses = mDao.getAll();
-                    
-                    int i;
-                    for(Produkt p: zamowienie.getProdukt()){
-                        for(Magazyn m: warehouses){
-                            i=0;
-                            while(!m.getProdukt().get(i).equals(p)){
-                                i++;
-                            }
-                            if(m.getProdukt().get(i).equals(p)){
-                                List<Produkt> prs = m.getProdukt();
-                                p.setLiczbaSztuk(p.getLiczbaSztuk()-1);
-                                pDao.update(p);
-                                prs.remove(p);
-                                m.setProdukt(prs);
-                                mDao.update(m);
-                            }
-                        }
-                    }
+//                    int i;
+//                    for(Produkt p: zamowienie.getProdukt()){
+//                        for(Magazyn m: warehouses){
+//                            i=0;
+//                            while(!m.getProdukt().get(i).equals(p)){
+//                                i++;
+//                            }
+//                            if(m.getProdukt().get(i).equals(p)){
+//                                List<Produkt> prs = m.getProdukt();
+//                                p.setLiczbaSztuk(p.getLiczbaSztuk()-1);
+//                                pDao.update(p);
+//                                prs.remove(p);
+//                                m.setProdukt(prs);
+//                                mDao.update(m);
+//                            }
+//                        }
+//                    }
                                 
                     JOptionPane.showMessageDialog(null, "Dodano zamówienie do listy zamówień.", "", JOptionPane.INFORMATION_MESSAGE);
                     MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
                     frame.updateOrders();
-                    frame.updateAvailability();
+//                    frame.updateAvailability();
                     frame.returnToShop();
                 } 
             }
@@ -273,7 +273,7 @@ public class OrderPanel extends javax.swing.JPanel {
         backButton.setBackground(new Color(196, 53, 53));
         backButton.setForeground(new Color(250, 250, 250));
         backButton.setText("Wróć do koszyka");
-        backButton.setBounds(380, 980, 200, 35);
+        backButton.setBounds(380+500, 980/2, 200, 35);
         this.add(backButton);
         
         backButton.addActionListener(new ActionListener() {     // po naciśnięciu powrót do koszyka
