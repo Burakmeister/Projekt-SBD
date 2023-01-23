@@ -5,36 +5,24 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import view.MainFrame;
 import view.SacPackage.Button;
-import view.PopUps;
 import dao.AdresDao;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import map.Adres;
 import dao.SposobRealizacjiDao;
-import dao.UzytkownikDao;
 import dao.ZamowienieDao;
 import java.util.List;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import map.SposobRealizacji;
-import map.Uzytkownik;
 import map.Zamowienie;
 
 
@@ -99,7 +87,7 @@ public class OrderPanel extends javax.swing.JPanel {
         txtNrlocal.setBounds(150, 410, 400, 45);
         this.add(txtNrlocal);
         
-        JList<String> adresList = new JList<String>();   // lista adresów, zwykła, od razu wypisana
+        JList<String> adresList = new JList<>();   // lista adresów, zwykła, od razu wypisana
         //
         //  Uzyskaj z bazy adresy i wpisz je do tablicy adresy
         //
@@ -117,12 +105,10 @@ public class OrderPanel extends javax.swing.JPanel {
         adresList.setBounds(600, 170, 550, size.height);
         this.add(adresList);
         
-        adresList.addListSelectionListener(new ListSelectionListener() {     // wybrany adres przypisz do zamówienia
-            @Override
-            public void valueChanged(ListSelectionEvent e) {    // kiedy użytkownik wybierze coś z listy 
-                
-            }
-        });
+        adresList.addListSelectionListener((ListSelectionEvent e) -> {
+            // kiedy użytkownik wybierze coś z listy
+        } // wybrany adres przypisz do zamówienia
+        );
         
         JLabel delivLabel = new JLabel("Wybierz sposób realizacji:");   // wybranie sposobu realizacji zmienić na listę - która pobiera dane z tabeli sposobrealizacji (string sposReal, koszt, int czasWysylki, boolean wniesienie)
         delivLabel.setFont(new Font("sansserif", 1, 36));
@@ -132,7 +118,7 @@ public class OrderPanel extends javax.swing.JPanel {
         this.add(delivLabel);
         
         
-        JList<String> realizacjaList = new JList<String>();   // lista sposobów realizacji
+        JList<String> realizacjaList = new JList<>();   // lista sposobów realizacji
         //
         //  Uzyskaj z bazy sposoby i wpisz je do tablicy sposobyRealizacji
         //
@@ -154,12 +140,10 @@ public class OrderPanel extends javax.swing.JPanel {
         realizacjaList.setBounds(150, 600, 400, size.height);
         this.add(realizacjaList);
         
-        realizacjaList.addListSelectionListener(new ListSelectionListener() {     // wybrany sposob przypisz do zamówienia
-            @Override
-            public void valueChanged(ListSelectionEvent e) {    // kiedy użytkownik wybierze coś z listy 
-                
-            }
-        });
+        realizacjaList.addListSelectionListener((ListSelectionEvent e) -> {
+            // kiedy użytkownik wybierze coś z listy
+        } // wybrany sposob przypisz do zamówienia
+        );
         
         JLabel infoLabel = new JLabel("Uwagi do zamówienia:");   // użytkownik może wpisać swoje uwagi w textfield, informacje z niego są przypisywane do zamówienia
         infoLabel.setFont(new Font("sansserif", 1, 36));
@@ -181,61 +165,53 @@ public class OrderPanel extends javax.swing.JPanel {
         orderButton.setBounds(150, 890, 180, 35);
         this.add(orderButton, "w 40%, h 40");
         
-        orderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {    // tutaj będzie trzeba dodać funkcjonalność związaną z dodaniem do listy zamówień danego zamówienia, powrót do widoku sklepu
-                //
-                // Jeśli nie wybrano adresu/nie wypełniono wszystkich pól adresu, nie wybrano sposobu realizacji zwróć popup
-                //
-                if(adresList.getSelectedIndex() == -1 || realizacjaList.getSelectedIndex() == -1 || txtCity.getText() == "" || txtStreet.getText() == "" || txtNumber.getText() == "" || txtCode.getText() == "" || txtNrlocal.getText() == "") {
-                    JOptionPane.showMessageDialog(null, "Nie podano wszystkich informacji potrzebnych do złożenia zamówienia.", "", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else {
-                    // Gdy wybrano opcję dodaj nowy adres dodaj go do tabeli adresów
-
-                    // Tutaj w ten sposób oszukujemy, tworząć obiekt adres nawet jeśli nie trzeba bo jak w ifie to potem go nie przekaże do zamówienia (pierwszy if z zamówieniem)
-                    int code = 0;
-                    int nr = 0;
-                    Adres adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
-                    if(adresList.getSelectedIndex() == 0)   {   // jeśli wybrano pierwszą pozycję na liście, a zawsze nią będzie "dodaj nowy adres"
-                        if(!(txtCity.getText().matches("[a-zA-Z]+")) || !(txtStreet.getText().matches("[a-zA-Z]+")) || !(txtNumber.getText().matches("[0-9]+"))) {    // jeśli wprowadzono nieprawidłowe dane
-                            JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
-                        
-                        AdresDao adresDao = new AdresDao();
-                        try {
-                            code = Integer.parseInt(txtCode.getText());     // musi być tak bo inaczej czemuś wywala error
-                            nr = Integer.parseInt(txtNrlocal.getText());
-                        } catch (NumberFormatException ne) {
-                            JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
-                            return;     // wyjdz z scope eventu
-                        }
-                        
-                        adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
-                        adresDao.addAdres(adres);  
-                    }
+        orderButton.addActionListener((ActionEvent e) -> {
+            // tutaj będzie trzeba dodać funkcjonalność związaną z dodaniem do listy zamówień danego zamówienia, powrót do widoku sklepu
+            //
+            // Jeśli nie wybrano adresu/nie wypełniono wszystkich pól adresu, nie wybrano sposobu realizacji zwróć popup
+            //
+            if (adresList.getSelectedIndex() == -1 || realizacjaList.getSelectedIndex() == -1 || txtCity.getText() == "" || txtStreet.getText() == "" || txtNumber.getText() == "" || txtCode.getText() == "" || txtNrlocal.getText() == "") {
+                JOptionPane.showMessageDialog(null, "Nie podano wszystkich informacji potrzebnych do złożenia zamówienia.", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                // Gdy wybrano opcję dodaj nowy adres dodaj go do tabeli adresów
                 
-                    //
-                    // Tutaj funkcjonalność dodania do listy zamówień danego zamówienia
-                    //
-                    AdresDao adresDao = new AdresDao();
-                    SposobRealizacjiDao sposobRealizacjiDao = new SposobRealizacjiDao();
-                    ZamowienieDao zamowienieDao = new ZamowienieDao();
-                    
-                    if(adresList.getSelectedIndex() == 0) {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
-                        zamowienieDao.addZamowienie(zamowienie);
+                // Tutaj w ten sposób oszukujemy, tworząć obiekt adres nawet jeśli nie trzeba bo jak w ifie to potem go nie przekaże do zamówienia (pierwszy if z zamówieniem)
+                int code = 0;
+                int nr = 0;
+                Adres adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
+                if (adresList.getSelectedIndex() == 0) {
+                    // jeśli wybrano pierwszą pozycję na liście, a zawsze nią będzie "dodaj nowy adres"
+                    if(!(txtCity.getText().matches("[a-zA-Z]+")) || !(txtStreet.getText().matches("[a-zA-Z]+")) || !(txtNumber.getText().matches("[0-9]+"))) {    // jeśli wprowadzono nieprawidłowe dane
+                        JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
+                        return;
                     }
-                    else {
-                        Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
-                        zamowienieDao.addZamowienie(zamowienie);
+                    AdresDao adresDao1 = new AdresDao();
+                    try {
+                        code = Integer.parseInt(txtCode.getText());     // musi być tak bo inaczej czemuś wywala error
+                        nr = Integer.parseInt(txtNrlocal.getText());
+                    } catch (NumberFormatException ne) {
+                        JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidłowy format danych w wpisanym adresie.", "", JOptionPane.INFORMATION_MESSAGE);
+                        return;     // wyjdz z scope eventu
                     }
-                                
-                    JOptionPane.showMessageDialog(null, "Dodano zamówienie do listy zamówień.", "", JOptionPane.INFORMATION_MESSAGE);
-                    MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
-                    frame.returnToShop();
-                } 
+                    adres = new Adres(txtCity.getText(), code, txtStreet.getText(), txtNumber.getText(), nr);
+                    adresDao1.addAdres(adres);
+                }
+                //
+                // Tutaj funkcjonalność dodania do listy zamówień danego zamówienia
+                //
+                AdresDao adresDao2 = new AdresDao();
+                SposobRealizacjiDao sposobRealizacjiDao1 = new SposobRealizacjiDao();
+                ZamowienieDao zamowienieDao = new ZamowienieDao();
+                if (adresList.getSelectedIndex() == 0) {
+                    Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao1.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                    zamowienieDao.addZamowienie(zamowienie);
+                } else {
+                    Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao2.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao1.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                    zamowienieDao.addZamowienie(zamowienie);
+                }
+                JOptionPane.showMessageDialog(null, "Dodano zamówienie do listy zamówień.", "", JOptionPane.INFORMATION_MESSAGE);
+                MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+                frame.returnToShop();
             }
         });
         
@@ -246,13 +222,11 @@ public class OrderPanel extends javax.swing.JPanel {
         backButton.setBounds(380, 890, 200, 35);
         this.add(backButton);
         
-        backButton.addActionListener(new ActionListener() {     // po naciśnięciu powrót do koszyka
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
-                frame.returnToCart();
-            }
-        });
+        backButton.addActionListener((ActionEvent e) -> {
+            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+            frame.returnToCart();
+        } // po naciśnięciu powrót do koszyka
+        );
     }
     
     @SuppressWarnings("unchecked")

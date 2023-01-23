@@ -1,9 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
-import java.util.List;
 import map.Uzytkownik;
-import map.Zamowienie;
 import map.Zamowienie;
 import org.hibernate.Session;
 
@@ -14,26 +12,27 @@ public class ZamowienieDao extends DAO<Zamowienie> {
     }
 
     public Zamowienie addZamowienie(Zamowienie zamowienie) {
-        Session session = this.getSession();
-        session.beginTransaction();
-        session.persist(zamowienie);
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            session.persist(zamowienie);
+            session.getTransaction().commit();
+        }
         return null;
     }
     
     public Zamowienie getZamowienie(int zamowienieId) {
-          Session session = this.getSession();
-        session.beginTransaction();
-        Zamowienie order = new Zamowienie();
-        order = (Zamowienie) session.createQuery(
-         " select order "
-                + "from map.Zamowienie order " +
-                        "where order.idZamowienia =: zamowienieId")
-                          .setParameter("idZamowienia", zamowienieId)
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
+        Zamowienie order;
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            order = new Zamowienie();
+            order = (Zamowienie) session.createQuery(
+                    " select order "
+                            + "from map.Zamowienie order " +
+                            "where order.idZamowienia =: zamowienieId")
+                    .setParameter("idZamowienia", zamowienieId)
+                    .getResultList();
+            session.getTransaction().commit();
+        }
         if (order != null) {
             return order;
         }
@@ -42,17 +41,18 @@ public class ZamowienieDao extends DAO<Zamowienie> {
     }
 
     public ArrayList<Zamowienie> getUserOrders(Uzytkownik user) {
-        Session session = this.getSession();
-        session.beginTransaction();
-        ArrayList<Zamowienie> order = null;
-        order = (ArrayList<Zamowienie>) session.createQuery(
-                " select order "
-                + "from map.Zamowienie order " +
-                        "where order.uzytkownik =: uzytkownik")
-                .setParameter("uzytkownik", user)
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
+        ArrayList<Zamowienie> order;
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            order = null;
+            order = (ArrayList<Zamowienie>) session.createQuery(
+                    " select order "
+                            + "from map.Zamowienie order " +
+                            "where order.uzytkownik =: uzytkownik")
+                    .setParameter("uzytkownik", user)
+                    .getResultList();
+            session.getTransaction().commit();
+        }
         if (order != null) {
             return order;
         }

@@ -21,10 +21,7 @@ import map.Uzytkownik;
 import net.miginfocom.swing.MigLayout;
 import view.Letter;
 // Klasy rozszerzające
-import view.SacPackage.Button;
 import view.MainFrame;
-import view.SacPackage.MyPasswordField;
-import view.SacPackage.MyTextField;
 
 /**
  *
@@ -54,7 +51,7 @@ public class PanelLoginAndRegister extends JPanel {
     }
 
     public void setUzytkownik(Uzytkownik uzytkownik) {
-        this.uzytkownik = uzytkownik;
+        PanelLoginAndRegister.uzytkownik = uzytkownik;
     }
 
     private void initRegister() {
@@ -100,54 +97,56 @@ public class PanelLoginAndRegister extends JPanel {
         cmd.setText("Stw" + Letter.UU.getLetter() + "rz konto");
         register.add(cmd, "w 40%, h 40");
 
-        cmd.addActionListener((ActionEvent e) -> {
-            UzytkownikDao dao = new UzytkownikDao();
-            Uzytkownik user;
-            String login1 = txtUser.getText();
-            String pass = txtPassReg.getText();
-            String name1 = txtname.getText();
-            String surname = txtsurname.getText();
-            String email = txtEmail.getText();
-            String pass2 = txtPass2.getText();
-            if (!txtname.getText().matches("[a-zA-Z]+") ) {    // jeśli imie, naziwsko zawiera inne znaki niż litery i czy poprawny format emaila
-                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe imi"+ Letter.EHH.getLetter() +".", "", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }else if(!(txtsurname.getText().matches("[a-zA-Z]+")) ){
-                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe nazwisko.", "", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }else if(!txtEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
-                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owy e-mail.", "", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            if (!"".equals(login1) && !"".equals(pass) && !"".equals(name1) && !"".equals(surname) && !"".equals(email) && pass.equals(pass2)) {
-                user = dao.addUser(name1, surname, login1, pass, new Date(), email, false);
-                //user = dao.getUser(pass, login);
-                if (!"".equals(login1) && !"".equals(pass)) {
-                    user = dao.getUser(pass, login1);
-                    setUzytkownik(user);
-                    if (user != null) {
-                        registrySuccesfull();
-                        MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
-                        frame.getContentPane().removeAll();     // by usunąć wszystko co było na ekranie logowania
-                        frame.setLayout(new BorderLayout());    // funkcjonalność starego konstruktora ShopFrame
-                        frame.loadPanels(user);
-                        frame.pack();
-                        frame.invalidate();     // funkcje do odświeżenia frame
-                        frame.validate();
-                        frame.repaint();
-                        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
-                    } else {
-                        txtUserLog.setText("");
-                        txtPassLog.setText("");
-                        WrongCredentials();
-                        
-                    }
+        cmd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UzytkownikDao dao = new UzytkownikDao();
+                Uzytkownik user;
+                String login1 = txtUser.getText();
+                String pass = txtPassReg.getText();
+                String name1 = txtname.getText();
+                String surname = txtsurname.getText();
+                String email = txtEmail.getText();
+                String pass2 = txtPass2.getText();
+                if (!txtname.getText().matches("[a-zA-Z]+") ) {    // jeśli imie, naziwsko zawiera inne znaki niż litery i czy poprawny format emaila
+                    JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe imi"+ Letter.EHH.getLetter() +".", "", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }else if(!(txtsurname.getText().matches("[a-zA-Z]+")) ){
+                    JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owe nazwisko.", "", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }else if(!txtEmail.getText().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")){
+                    JOptionPane.showMessageDialog(null, "Wprowadzono nieprawid" + Letter.ELL.getLetter() + "owy e-mail.", "", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 }
-            } else {
-                WrongCredentials();
-            }
-        } // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
-        );
+                if (!"".equals(login1) && !"".equals(pass) && !"".equals(name1) && !"".equals(surname) && !"".equals(email) && pass.equals(pass2)) {
+                    user = dao.addUser(name1, surname, login1, pass, new Date(), email, false);
+                    //user = dao.getUser(pass, login);
+                    if (!"".equals(login1) && !"".equals(pass)) {
+                        user = dao.getUser(pass, login1);
+                        setUzytkownik(user);
+                        if (user != null) {
+                            registrySuccesfull();
+                            MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+                            frame.getContentPane().removeAll();     // by usunąć wszystko co było na ekranie logowania
+                            frame.setLayout(new BorderLayout());    // funkcjonalność starego konstruktora ShopFrame
+                            frame.loadPanels(user);
+                            frame.pack();
+                            frame.invalidate();     // funkcje do odświeżenia frame
+                            frame.validate();
+                            frame.repaint();
+                            frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
+                        } else {
+                            txtUserLog.setText("");
+                            txtPassLog.setText("");
+                            WrongCredentials();
+                            
+                        }
+                    }
+                } else {
+                    WrongCredentials();
+                }
+            } // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
+        });
     }
 
     private void registrySuccesfull() {
@@ -207,35 +206,33 @@ public class PanelLoginAndRegister extends JPanel {
         cmd.setText("Zaloguj si" + Letter.EHH.getLetter());
         login.add(cmd, "w 40%, h 40");
 
-        cmd.addActionListener(new ActionListener() {    // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UzytkownikDao dao = new UzytkownikDao();
-                Uzytkownik user;
-                String login = txtUserLog.getText(), pass = txtPassLog.getText();
-
-                if (!"".equals(login) && !"".equals(pass)) {
-                    user = dao.getUser(pass, login);
-                    setUzytkownik(user);
-                    if (user != null) {
-                        MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
-                        frame.getContentPane().removeAll();     // by usunąć wszystko co było na ekranie logowania
-                        frame.setLayout(new BorderLayout());    // funkcjonalność starego konstruktora ShopFrame
-                        frame.loadPanels(user);
-                        frame.pack();
-                        frame.invalidate();     // funkcje do odświeżenia frame
-                        frame.validate();
-                        frame.repaint();
-                        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
-                    } else {
-                        txtUserLog.setText("");
-                        txtPassLog.setText("");
-                        WrongCredentials();
-
-                    }
+        cmd.addActionListener((ActionEvent e) -> {
+            UzytkownikDao dao = new UzytkownikDao();
+            Uzytkownik user;
+            String login1 = txtUserLog.getText();
+            String pass = txtPassLog.getText();
+            if (!"".equals(login1) && !"".equals(pass)) {
+                user = dao.getUser(pass, login1);
+                setUzytkownik(user);
+                if (user != null) {
+                    MainFrame frame = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());  // zdobądź rodzica (czyli JFrame)
+                    frame.getContentPane().removeAll();     // by usunąć wszystko co było na ekranie logowania
+                    frame.setLayout(new BorderLayout());    // funkcjonalność starego konstruktora ShopFrame
+                    frame.loadPanels(user);
+                    frame.pack();
+                    frame.invalidate();     // funkcje do odświeżenia frame
+                    frame.validate();
+                    frame.repaint();
+                    frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);   // Fullscreen
+                } else {
+                    txtUserLog.setText("");
+                    txtPassLog.setText("");
+                    WrongCredentials();
+                    
                 }
             }
-        });
+        } // narazie po wciśnięciu przycisku "Zaloguj się" przechodzi do sklepu!! //juz nie
+        );
     }
 
     // Z ShopFrame

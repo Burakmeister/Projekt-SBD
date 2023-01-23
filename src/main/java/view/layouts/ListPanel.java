@@ -47,7 +47,6 @@ public class ListPanel extends JPanel implements ActionListener {
 
     public ListPanel(Dimension dim, int cardinality, boolean admin) {
         this.admin = admin;
-//		this.setSize(new Dimension(dim.width, dim.height*10));
         this.curResolution = Toolkit.getDefaultToolkit().getScreenSize();
         if (!MainFrame.itWasScalling()) {
             if (this.curResolution.width != this.defaultResolution.width || this.curResolution.height != this.defaultResolution.height) {
@@ -72,8 +71,8 @@ public class ListPanel extends JPanel implements ActionListener {
                 }
             }
 
-            this.imageWidth = (int) (this.imageWidth * scale);
-            this.imageHeight = (int) (this.imageHeight * scale);
+            ListPanel.imageWidth = (int) (ListPanel.imageWidth * scale);
+            ListPanel.imageHeight = (int) (ListPanel.imageHeight * scale);
             MainFrame.wasScalling();
         }
 
@@ -88,13 +87,10 @@ public class ListPanel extends JPanel implements ActionListener {
             add_product.setFont(font);
             add_product.setBackground(Color.black);
             add_product.setForeground(Color.WHITE);
-            add_product.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (e.getSource() == add_product) {
-                        MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
-                        mf.showNewProduct();
-                    }
+            add_product.addActionListener((ActionEvent e) -> {
+                if (e.getSource() == add_product) {
+                    MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, (JComponent) e.getSource());
+                    mf.showNewProduct();
                 }
             });
             this.add(add_product);

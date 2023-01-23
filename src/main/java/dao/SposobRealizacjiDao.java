@@ -1,9 +1,6 @@
 package dao;
 
 import java.util.ArrayList;
-import java.util.List;
-import map.Adres;
-import map.SposobRealizacji;
 import map.SposobRealizacji;
 import org.hibernate.Session;
 
@@ -24,7 +21,6 @@ public class SposobRealizacjiDao extends DAO<SposobRealizacji>{
         if (cat != null) {
             return cat;
         }
-
         return null;
     }
 }

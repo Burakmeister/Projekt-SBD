@@ -13,15 +13,16 @@ public class MagazynDao extends DAO<Magazyn> {
     }
 
     public ArrayList<Magazyn> getAll() {
-        Session session = this.getSession();
-        session.beginTransaction();
-        ArrayList<Magazyn> cat = null;
-        cat = (ArrayList<Magazyn>) session.createQuery(
-                " select cat "
-                + "from map.Magazyn cat ")
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
+        ArrayList<Magazyn> cat;
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            cat = null;
+            cat = (ArrayList<Magazyn>) session.createQuery(
+                    " select cat "
+                            + "from map.Magazyn cat ")
+                    .getResultList();
+            session.getTransaction().commit();
+        }
         if (cat != null) {
             return cat;
         }
@@ -29,28 +30,29 @@ public class MagazynDao extends DAO<Magazyn> {
     }
 
     public Magazyn addMagazyn(Magazyn magazyn) {
-        Session session = this.getSession();
-        session.beginTransaction();
-        session.persist(magazyn);
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            session.persist(magazyn);
+            session.getTransaction().commit();
+        }
         return null;
     }
     
     public Magazyn getMagazyn(int pojemnosc, Adres adres) {
         System.out.println(pojemnosc + "  " + adres);
-        Session session = this.getSession();
-        session.beginTransaction();
-        Magazyn magazyn = null;
-        magazyn = (Magazyn) session.createQuery(
-                " select magazyn "
-                + "from map.Magazyn magazyn "
-                + "where magazyn.pojemnosc = :pojemnosc and magazyn.adres =:adres")
-                .setParameter("pojemnosc", pojemnosc)
-                .setParameter("adres", adres)
-                .uniqueResult();
-        session.getTransaction().commit();
-        session.close();
+        Magazyn magazyn;
+        try (Session session = this.getSession()) {
+            session.beginTransaction();
+            magazyn = null;
+            magazyn = (Magazyn) session.createQuery(
+                    " select magazyn "
+                            + "from map.Magazyn magazyn "
+                            + "where magazyn.pojemnosc = :pojemnosc and magazyn.adres =:adres")
+                    .setParameter("pojemnosc", pojemnosc)
+                    .setParameter("adres", adres)
+                    .uniqueResult();
+            session.getTransaction().commit();
+        }
         if (magazyn != null) {
             return magazyn;
         }

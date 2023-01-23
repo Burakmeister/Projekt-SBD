@@ -15,7 +15,7 @@ public enum Letter {
    ZY('\u017C'),
    ZIET('\u017A');
    
-   private char letter;
+   private final char letter;
    
    private Letter(char letter){
        this.letter = letter;

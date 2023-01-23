@@ -34,15 +34,15 @@ import view.Letter;
 import view.MainFrame;
 import static view.layouts.ListPanel.scale;
 
-public class WarehouseLayout extends JPanel implements ActionListener {
+public final class WarehouseLayout extends JPanel implements ActionListener {
 
     public static final int borderPx = Toolkit.getDefaultToolkit().getScreenSize().width / 500;
-    private Font font = new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (40 * scale));
+    private final Font font = new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (40 * scale));
 
-    private JScrollPane scroll;
+    private final JScrollPane scroll;
     private Cart mainPanel;
 
-    private JPanel upPanel;
+    private final JPanel upPanel;
     private JButton returnButton;
     private JButton saveButton;
 
@@ -354,7 +354,6 @@ public class WarehouseLayout extends JPanel implements ActionListener {
                 adresTemp.setNrBudynku(this.buildNumField.getText());
                 adresTemp.setUlica(this.streetField.getText());
 
-//            address, cityField, zipCodeField, streetField, buildNumField, apartNumField
                 if (apartNumField.getText().equals("")) {
                     adresTemp.setNrLokalu(null);
                 } else {

@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Toolkit;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public enum Image {
