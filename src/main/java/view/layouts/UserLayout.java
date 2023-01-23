@@ -5,6 +5,7 @@
 package view.layouts;
 
 import dao.KategoriaDao;
+import dao.UzytkownikDao;
 import dao.ZamowienieDao;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +28,7 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -123,7 +125,7 @@ public class UserLayout extends JPanel implements ActionListener {
     private void makeCategoryPanel() {
 
         if (!admin) {
-           JLabel ordersLabel = new JLabel("Zam" + Letter.UU.getLetter() + "wienia");
+           JLabel ordersLabel = new JLabel("Zam" + Letter.UU.getLetter() + "wienia:");
         ordersLabel.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 30)));
         ordersLabel.setForeground(Color.WHITE);
 
@@ -147,7 +149,7 @@ public class UserLayout extends JPanel implements ActionListener {
         list.setSelectionBackground(Color.gray);
         list.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, (int) (scale * 30)));
         for (Zamowienie zamowienie : zamowienia) {
-            String str = "nr." + String.valueOf(zamowienie.getIdZamowienia()) + " " + zamowienie.getDataGodzina();
+            String str = "nr." + String.valueOf(zamowienie.getIdZamowienia()) + " " + zamowienie.getDataGodzina().toString().substring(0,9);
             model.addElement(str);
         }
         this.categoryPanel.add(list, BorderLayout.CENTER);
@@ -263,9 +265,6 @@ public class UserLayout extends JPanel implements ActionListener {
             c.gridx = 1;
             c.gridy = 3;
         this.mainPanel.add(passField, c);
-//
-//        JPanel dataPanel = new JPanel();
-//        dataPanel.setBackground(new Color(188, 69, 69));
         JLabel dataLabel = new JLabel("Data za" + Letter.ELL.getLetter() + "o" + Letter.ZY.getLetter() + "enia konta:");
         dataLabel.setFont(font);
         dataLabel.setForeground(Color.WHITE);
@@ -277,9 +276,9 @@ public class UserLayout extends JPanel implements ActionListener {
             c.gridx = 0;
             c.gridy = 4;
         this.mainPanel.add(dataLabel, c);
-//        dataPanel.add(dataLabel);
         this.dateField = new JTextField(String.valueOf(user.getDataZalozeniaKonta()));
         dateField.setFont(font);
+        dateField.setEditable(false);
           c.fill = GridBagConstraints.BOTH;
             c.weighty = 0.2;
             c.weightx = 0.25;
@@ -318,6 +317,10 @@ public class UserLayout extends JPanel implements ActionListener {
 
         this.upPanel.add(this.saveButton, BorderLayout.EAST);
     }
+    
+    private void savedUserPopUp() {
+        JOptionPane.showMessageDialog(null, "Zapisano zmiany w bazie danych", "", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -328,23 +331,22 @@ public class UserLayout extends JPanel implements ActionListener {
         if (e.getSource() == this.showDetails) {
 
             ZamowienieDao dao = new ZamowienieDao();
-//            Zamowienie zamowienie = dao.getZamowienie(());
-//            String str = list.getSelectedIndex();
-              int[] selectedIndices = list.getSelectedIndices();
-//              
+              int[] selectedIndices = list.getSelectedIndices();        
             List<Zamowienie> zamowienia = dao.getUserOrders(user);
             
             Zamowienie zamowienie = zamowienia.get(selectedIndices[0]);
-//            
-//              System.out.println(list.getSelectedIndex());
-//              
-//                System.out.println(zamowienia.size());
-//                
-//            System.out.println(zamowienia.get(selectedIndices[0]));
             MainFrame mf = (MainFrame) SwingUtilities.getWindowAncestor(this);
             mf.showOrderDetails(zamowienie);
             System.out.println(list.getSelectedIndex());
             System.out.println(zamowienia.get(list.getSelectedIndex()));
+        } if (e.getSource() == this.saveButton) {
+            this.user.setImie(this.nameField.getText());
+            this.user.setNazwisko(this.surnameField.getText());
+            this.user.setNickname(this.nickField.getText());
+            this.user.setPassword(this.passField.getText());
+            UzytkownikDao dao = new UzytkownikDao();
+            dao.update(user);
+            savedUserPopUp();
         }
     }
 
