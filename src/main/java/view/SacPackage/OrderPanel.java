@@ -51,9 +51,9 @@ public class OrderPanel extends javax.swing.JPanel {
     private float sumaZamowienie;
     
     public OrderPanel(List<Produkt> produkty) {
+        this.produkty = produkty;
         initComponents();
         init();
-        this.produkty = produkty;
     }
 
     private String czyWniesienie(boolean b) {   // do ładnego sformatowania tekstu przy sposobach realizacji
@@ -178,22 +178,19 @@ public class OrderPanel extends javax.swing.JPanel {
         uwagiField.setBounds(150, 800, 990, 45);
         this.add(uwagiField);
         
-         // Pobranie produktów z koszyka
-        //MainFrame mf = (MainFrame) (JFrame) SwingUtilities.getWindowAncestor(this);
-        //produkty = mf.getProductsFromCart();
-        
         // Obliczenie całkowitego kosztu zamówienia
         int i = 0;
         for (Produkt p : produkty) {
-            sumaZamowienie += p.getCena() * (int) (p.getLiczbaSztuk());
+            sumaZamowienie += p.getCena();
             i++;
         }
         
-        MyTextField cenaField = new MyTextField();
-        cenaField.setHint("Całkowity koszt zamówienia: " + sumaZamowienie);
-        cenaField.setBackground(Color.WHITE);
-        cenaField.setBounds(150, 890, 990, 45);
-        this.add(cenaField);
+        JLabel cenaLabel = new JLabel("Całkowity koszt zamówienia: " + sumaZamowienie + " zł");
+        cenaLabel.setFont(new Font("sansserif", 1, 36));
+        cenaLabel.setForeground(Color.WHITE);
+        size = cenaLabel.getPreferredSize();
+        cenaLabel.setBounds(150, 890, size.width, size.height);
+        this.add(cenaLabel);
 
         Button orderButton = new Button();
         orderButton.setBackground(new Color(196, 53, 53));
