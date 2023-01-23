@@ -246,10 +246,12 @@ public class OrderPanel extends javax.swing.JPanel {
                     
                     if(adresList.getSelectedIndex() == 0) {
                         Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adres, sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie.setProdukt(produkty);    // nowe
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                     else {
                         Zamowienie zamowienie = new Zamowienie(uwagiField.getText(), adresDao.getById((long) adresList.getSelectedIndex()), sposobRealizacjiDao.getById((long) realizacjaList.getSelectedIndex()), PanelLoginAndRegister.getUzytkownik());
+                        zamowienie.setProdukt(produkty);
                         zamowienieDao.addZamowienie(zamowienie);
                     }
                                 
